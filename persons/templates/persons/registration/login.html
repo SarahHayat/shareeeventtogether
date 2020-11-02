@@ -1,0 +1,19 @@
+{% extends 'persons/base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block content %}
+    <div class="login row justify-content-center mt-4">
+        <div class="col col-sm-6 col-md-4">
+            <p class="text-muted">Veuillez vous connecter</p>
+            <form method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form show_label=False %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary w-100 mb-2">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,7 +1,6 @@
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.forms import UserCreationForm, UsernameField
+from django.contrib.auth.forms import UsernameField
 from django.forms import ModelForm
 
 from users.models import User
