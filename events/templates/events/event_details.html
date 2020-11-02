@@ -1,0 +1,12 @@
+{% extends 'persons/base_navbar.html' %}
+
+{% block content %}
+    <a href="{% url 'new-event' %}">Ajouter</a>
+    <div>
+        {% for event in events %}
+            <p>titre : {{ event.title }}</p>
+            <p>description : {{ event.description }}</p>
+        {% endfor %}
+    </div>
+
+{% endblock %}
