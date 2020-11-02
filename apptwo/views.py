@@ -5,5 +5,5 @@ from django.http import HttpResponse
 # Create your views here.
 def djangorocks (request):
     name = 'sarah'
-    body= 'je mapelle {}'.format(name)
+    body= f'je mapelle {name}'
     return HttpResponse(body)
