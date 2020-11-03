@@ -1,12 +1,25 @@
 {% extends 'persons/base_navbar.html' %}
 
 {% block content %}
-    <a href="{% url 'new-event' %}">Ajouter</a>
-    <div>
-        {% for event in events %}
-            <p>titre : {{ event.title }}</p>
-            <p>description : {{ event.description }}</p>
-        {% endfor %}
+    <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
+    <div class="row">
+        {% if events %}
+            <div class="col-md-12 p-0">
+                <h1>Évenements</h1>
+                {% for event in events %}
+                    <div class="row ">
+                        <div class="col p-0">
+                            <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>
+                            <p>{{ event.event_date|date:'d/m - h:m' }}</p>
+                            <p>{{ event.description }}</p>
+                            <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Il n'y a pas d'évenements pour le moment</p>
+        {% endif %}
     </div>
 
 {% endblock %}

@@ -18,7 +18,7 @@ class EventDetailsView(View):
             'events': events,
             'person': person,
         }
-        return render(request, 'events/details_event.html', context)
+        return render(request, 'events/event_details.html', context)
 
 
 class EventCreateView(PersonView):

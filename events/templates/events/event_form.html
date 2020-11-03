@@ -1,0 +1,18 @@
+{% extends 'persons/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {% bootstrap_field form.title %}
+            {% bootstrap_field form.description %}
+            {% bootstrap_field form.address %}
+            {% bootstrap_field form.zip_code %}
+            {% bootstrap_field form.city %}
+            {% bootstrap_field form.category %}
+            {% bootstrap_field form.event_date %}
+        </div>
+        <button type="submit">Ajouter</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'persons/base_navbar.html' %}
+
+{% block title %}Nouveau evenement{% endblock %}
+
+{% block content %}
+    {% include 'events/event_form.html' with submit_label=_('Ajouter') submit_icon='fas fa-plus-circle' %}
+{% endblock content %}

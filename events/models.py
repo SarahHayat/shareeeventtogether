@@ -1,11 +1,11 @@
 from django.db import models
 
-class Event(models.Model):
 
-    PARTY_CATEGORY = 'party'
-    GAME_CATEGORY = 'game'
-    TOURISM_CATEGORY = 'tourism'
-    AREA_CATEGORY = 'area'
+class Event(models.Model):
+    PARTY_CATEGORY = 'soiree'
+    GAME_CATEGORY = 'jeux'
+    TOURISM_CATEGORY = 'tourisme'
+    AREA_CATEGORY = 'plein air'
 
     CATEGORY_CHOICES = (
         (PARTY_CATEGORY, 'soiree'),
@@ -14,7 +14,7 @@ class Event(models.Model):
         (AREA_CATEGORY, 'plein air')
     )
 
-    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE, null=True)
+    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
     title = models.CharField('titre', max_length=150)
     description = models.TextField('description')
     address = models.CharField('adresse', max_length=100)
