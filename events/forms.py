@@ -8,5 +8,7 @@ class EventForm(forms.ModelForm):
         model = Event
         exclude = ['person', 'created_at']
         widgets = {
-            'event_date': forms.DateInput(attrs={'class':'datepicker'}),
+            'event_date': forms.DateTimeInput(attrs={
+                'type': 'datetime-local',
+            })
         }

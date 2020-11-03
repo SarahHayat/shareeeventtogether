@@ -5,6 +5,7 @@ from django.views import View
 
 from events.forms import EventForm
 from events.models import Event
+from persons import navigation
 from persons.models import Person
 from persons.views import PersonView
 
@@ -13,10 +14,11 @@ class EventDetailsView(View):
     def get(self, request):
         events = Event.objects.all()
         user = request.user
-        person = Person.objects.get(user=user)
         context = {
+            'user': user,
             'events': events,
-            'person': person,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+
         }
         return render(request, 'events/event_details.html', context)
 
@@ -27,6 +29,7 @@ class EventCreateView(PersonView):
         person = Person.objects.get(user=user)
         form = EventForm()
         context = {
+            'user': user,
             'person': person,
             'form': form,
         }

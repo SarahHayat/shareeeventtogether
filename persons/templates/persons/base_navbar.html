@@ -10,19 +10,22 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
-                </li>
+                {% for item in navigation_items %}
+                    <li class="nav-item {% if item.active %}active{% endif %}">
+                        <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
+                    </li>
+                {% endfor %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Menu
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a>
+                        {% if user.pk %}
+                            <a class="dropdown-item" href="{% url 'logout' %}">Déconnexion</a>
+                        {% else %}
+                            <a class="dropdown-item" href="{% url 'login' %}">Connexion / Creer un compte</a>
+                        {% endif %}
                     </div>
                 </li>
             </ul>

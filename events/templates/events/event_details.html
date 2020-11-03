@@ -1,7 +1,9 @@
 {% extends 'persons/base_navbar.html' %}
 
 {% block content %}
+    {% if user.pk %}
     <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
+    {% endif %}
     <div class="row">
         {% if events %}
             <div class="col-md-12 p-0">

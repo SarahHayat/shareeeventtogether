@@ -5,13 +5,13 @@
     <form method="post">
         {% csrf_token %}
         <div>
-            {% bootstrap_field form.title %}
-            {% bootstrap_field form.description %}
-            {% bootstrap_field form.address %}
-            {% bootstrap_field form.zip_code %}
-            {% bootstrap_field form.city %}
-            {% bootstrap_field form.category %}
-            {% bootstrap_field form.event_date %}
+            {% bootstrap_field form.title required_css_class='required'%}
+            {% bootstrap_field form.description required_css_class='required'%}
+            {% bootstrap_field form.address required_css_class='required'%}
+            {% bootstrap_field form.zip_code required_css_class='required'%}
+            {% bootstrap_field form.city required_css_class='required'%}
+            {% bootstrap_field form.category required_css_class='required'%}
+            {% bootstrap_field form.event_date required_css_class='required'%}
         </div>
         <button type="submit">Ajouter</button>
     </form>

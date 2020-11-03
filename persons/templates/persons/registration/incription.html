@@ -1,0 +1,25 @@
+{% extends 'persons/base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+     <form method="post">
+        {% csrf_token %}
+        <div>
+            {% bootstrap_field form.email required_css_class='required'%}
+            {% bootstrap_field form.password required_css_class='required'%}
+            {% bootstrap_field form.first_name required_css_class='required'%}
+            {% bootstrap_field form.last_name required_css_class='required'%}
+            {% bootstrap_field form.birth_date required_css_class='required'%}
+            {% bootstrap_field form.address required_css_class='required'%}
+            {% bootstrap_field form.zip_code required_css_class='required'%}
+            {% bootstrap_field form.city required_css_class='required'%}
+            {% bootstrap_field form.country required_css_class='required'%}
+            {% bootstrap_field form.phone_number required_css_class='required'%}
+            {% bootstrap_field form.pseudo required_css_class='required'%}
+            {% bootstrap_field form.person_type required_css_class='required'%}
+        </div>
+        <button type="submit">Ajouter</button>
+    </form>
+{% endblock %}

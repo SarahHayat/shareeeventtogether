@@ -4,6 +4,7 @@
 {% block title %}Connexion{% endblock %}
 
 {% block content %}
+    <a class="btn btn-primary" href="{% url 'home' %}">Accueil</a>
     <div class="login row justify-content-center mt-4">
         <div class="col col-sm-6 col-md-4">
             <p class="text-muted">Veuillez vous connecter</p>
@@ -14,6 +15,7 @@
                     <button type="submit" class="btn btn-primary w-100 mb-2">Se connecter</button>
                 </div>
             </form>
+            <a href="{% url 'inscription' %}">Vous n'avez pas de compte ? Inscrivez-vous</a>
         </div>
     </div>
 {% endblock %}
