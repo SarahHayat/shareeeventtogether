@@ -24,5 +24,16 @@ class Event(models.Model):
     created_at = models.DateTimeField('crée à', auto_now=True)
     event_date = models.DateTimeField('date evenement', auto_now=False)
 
+    def getEventId(self):
+        return self.pk
+
     def __str__(self):
         return f'{self.title}-{self.category}'
+
+
+class InscriptionEvent(models.Model):
+    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.person.pseudo} - {self.event.title}'

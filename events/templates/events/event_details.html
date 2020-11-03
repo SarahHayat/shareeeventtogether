@@ -4,8 +4,8 @@
     <div class="row">
         {% if events %}
             <div class="col-md-12 p-0 mt-3">
-            <div class="row">
-                    <h1 class="col-md-7">Mes Évenements</h1>
+                <div class="row">
+                    <h1 class="col-md-7">Évenements</h1>
                     <div class="col-md-5 text-right">
                         {% if user.pk %}
                             <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
@@ -15,11 +15,14 @@
                 {% for event in events %}
                     <div class="row ">
                         <div class="col p-0">
-                            <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>
-                            <p>{{ person.pseudo }}</p>
+                            <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>{{ event.pk }}
+                            <p>{{ event.person.pseudo }}</p>
                             <p>{{ event.event_date|date:'d/m - h:m' }}</p>
                             <p>{{ event.description }}</p>
                             <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                            {% if person != event.person and not is_inscrit and is_inscrit.event.pk != event.pk %}
+                                <a href="{% url 'inscription-event' event.pk %}" class="btn btn-primary">S'inscrire</a>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

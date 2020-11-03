@@ -1,0 +1,19 @@
+{% extends 'persons/base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {% bootstrap_field form.title required_css_class='required'%}
+            {% bootstrap_field form.description required_css_class='required'%}
+            {% bootstrap_field form.address required_css_class='required'%}
+            {% bootstrap_field form.zip_code required_css_class='required'%}
+            {% bootstrap_field form.city required_css_class='required'%}
+            {% bootstrap_field form.category required_css_class='required'%}
+            {% bootstrap_field form.event_date required_css_class='required'%}
+        </div>
+        <a class="text-danger mr-2" href="{% url 'profil-events' %}">Annuler</a>
+        <button type="submit">Ajouter</button>
+    </form>
+{% endblock %}

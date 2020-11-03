@@ -76,7 +76,6 @@ class EditProfilView(PersonView):
         user = request.user
         person = Person.objects.get(user=user)
         form = ProfilForm(instance=person, data=request.POST)
-        print('form error = ' + str(form.errors))
         if form.is_valid():
             person.user.email = form.cleaned_data['email']
             person.user.save()
