@@ -1,0 +1,97 @@
+{% extends 'persons/base_navbar.html' %}
+
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <h1>Mon Profil</h1>
+            <h2>{{ person.pseudo }} ({{ person.person_type }})</h2>
+        </div>
+        <div class="col-md-4 text-right">
+                <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Prénom</b>
+                <br>
+                {{ person.first_name }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Nom</b>
+                <br>
+                {{ person.last_name }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Email</b>
+                <br>
+                {{ person.user.email }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Anniversaire</b>
+                <br>
+                {{ person.birth_date }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Adresse</b>
+                <br>
+                {{ person.address }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Code Postale</b>
+                <br>
+                {{ person.zip_code }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Ville</b>
+                <br>
+                {{ person.city }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Pays</b>
+                <br>
+                {{ person.country }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Téléphone</b>
+                <br>
+                {{ person.phone_number }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Karma</b>
+                <br>
+                {{ person.karma }}
+            </p>
+        </div>
+    </div>
+{% endblock content %}
+
