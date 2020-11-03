@@ -55,6 +55,7 @@ class DetailProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/profil/profil_detail.html', context)
 
@@ -67,6 +68,7 @@ class EditProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/profil/profil_edit.html', context)
 
@@ -85,5 +87,7 @@ class EditProfilView(PersonView):
             context = {
                 'person': person,
                 'form': form,
+                'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+
             }
             return render(request, 'persons/profil/profil_edit.html', context)

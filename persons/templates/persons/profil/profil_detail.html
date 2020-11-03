@@ -4,13 +4,21 @@
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-    <div class="row mb-3">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil' %}">Profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil-events' %}">Events</a>
+        </li>
+    </ul>
+    <div class="row my-3">
         <div class="col-md-8">
             <h1>Mon Profil</h1>
             <h2>{{ person.pseudo }} ({{ person.person_type }})</h2>
         </div>
         <div class="col-md-4 text-right">
-                <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
+            <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
         </div>
     </div>
     <div class="row">

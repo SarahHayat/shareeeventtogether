@@ -14,8 +14,10 @@ class EventDetailsView(View):
     def get(self, request):
         events = Event.objects.all()
         user = request.user
+        person = Person.objects.get(user=user)
         context = {
             'user': user,
+            'person': person,
             'events': events,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
@@ -54,3 +56,17 @@ class EventCreateView(PersonView):
                 'form': form
             }
             return render(request, 'events/event_new.html', context)
+
+
+class MyEventDetailsView(PersonView):
+    def get(self, request):
+        user = request.user
+        events = Event.objects.filter(person__user=user)
+        user = request.user
+        context = {
+            'user': user,
+            'events': events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+
+        }
+        return render(request, 'persons/events/my_events_details.html', context)
