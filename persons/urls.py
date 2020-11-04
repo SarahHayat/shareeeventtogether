@@ -2,7 +2,8 @@ from django.http import HttpResponseRedirect
 from django.urls import path, reverse_lazy, include
 from django.contrib.auth import views as auth_views
 
-from events.views import MyEventDetailsView, DeleteEventView, EditEventView
+from events.views import MyEventDetailsView, DeleteEventView, EditEventView, MyRegisteredEventsView, \
+    DesiscriptionEventView
 from persons.views import HomeView, InscriptionView, EditProfilView, DetailProfilView
 
 urlpatterns = [
@@ -14,8 +15,11 @@ urlpatterns = [
     path('profil', DetailProfilView.as_view(), name='profil'),
     path('profil/edit', EditProfilView.as_view(), name='profil-edit'),
     path('profil/events', MyEventDetailsView.as_view(), name='profil-events'),
-    path('profil/events/<int:event_id>/delete', DeleteEventView.as_view(), name='delete-event'),
+    path('profil/events', MyEventDetailsView.as_view(), name='profil-events'),
+    path('profil/events/registered', MyRegisteredEventsView.as_view(), name='profil-registered_events'),
+    path('profil/events/<int:inscription_id>/registered/supprimer', DesiscriptionEventView.as_view(), name='desinscription-event'),
     path('profil/events/<int:event_id>/modifier', EditEventView.as_view(), name='edit-event'),
+    path('profil/events/<int:event_id>/supprimer', DeleteEventView.as_view(), name='delete-event'),
     path('event/', include('events.urls'))
 
 

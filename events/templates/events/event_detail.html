@@ -1,0 +1,25 @@
+{% extends 'persons/base_navbar.html' %}
+
+{% block content %}
+    <div class="row">
+    <a class="text-primary" href="{% url 'details' %}"><i class="fa fa-arrow-left"></i> retour</a>
+        {% if event %}
+            <div class="col p-0 mt-3 text-center">
+                <h1>{{ event.title|title }} ({{ event.category|title }})</h1>
+                <p>Par {{ event.person.pseudo }} le {{ event.event_date|date:'d/m/Y à h:m' }}</p>
+                <hr>
+                <h4>Description :</h4>
+                <p>{{ event.description }}</p>
+                <hr>
+                <h4>Lieu :</h4>
+                <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                {% if user.pk %}
+                    {% if person != event.person and not is_registered %}
+                        <a href="{% url 'inscription-event' event.pk %}" class="btn btn-primary">s'inscire</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

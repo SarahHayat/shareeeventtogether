@@ -5,6 +5,8 @@ from django.views import View
 
 from events.forms import EventForm
 from events.models import Event, InscriptionEvent
+from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
+    get_if_person_is_registered, get_inscription_event_person
 from persons import navigation
 from persons.models import Person
 from persons.views import PersonView
@@ -12,25 +14,33 @@ from persons.views import PersonView
 
 class EventDetailsView(View):
     def get(self, request):
-        events = Event.objects.all()
+        events = get_all_events()
         user = request.user
-        person = Person.objects.get(user=user)
-        is_inscrit = InscriptionEvent.objects.filter(person__pk__exact=person.pk).exists()
-        context = {
-            'user': user,
-            'person': person,
-            'events': events,
-            'is_inscrit': is_inscrit,
-            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        if user.pk:
+            person = get_person_by_user(user)
+            context = {
+                'user': user,
+                'person': person,
+                'events': events,
+                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
-        }
-        return render(request, 'events/event_details.html', context)
+            }
+        else:
+            events = get_all_events()
+            user = request.user
+            context = {
+                'user': user,
+                'events': events,
+                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+
+            }
+        return render(request, 'events/event_list.html', context)
 
 
 class EventCreateView(PersonView):
     def get(self, request):
         user = request.user
-        person = Person.objects.get(user=user)
+        person = get_person_by_user(user)
         form = EventForm()
         context = {
             'user': user,
@@ -41,7 +51,7 @@ class EventCreateView(PersonView):
 
     def post(self, request):
         user = request.user
-        person = Person.objects.get(user=user)
+        person = get_person_by_user(user)
         form = EventForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
@@ -60,7 +70,7 @@ class EventCreateView(PersonView):
 class MyEventDetailsView(PersonView):
     def get(self, request):
         user = request.user
-        events = Event.objects.filter(person__user=user)
+        events = get_events_by_user(user)
         user = request.user
         context = {
             'user': user,
@@ -71,9 +81,31 @@ class MyEventDetailsView(PersonView):
         return render(request, 'persons/events/my_events_details.html', context)
 
 
+class MyRegisteredEventsView(PersonView):
+    def get(self, request):
+        user = request.user
+        person = get_person_by_user(user)
+        inscription_events = get_inscription_event_person(person)
+        context = {
+            'user': user,
+            'person': person,
+            'inscription_events': inscription_events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+
+        }
+        return render(request, 'persons/events/my_registered_events.html', context)
+
+
+class DesiscriptionEventView(PersonView):
+    def get(self, request, inscription_id):
+        inscription = InscriptionEvent.objects.get(pk=inscription_id)
+        inscription.delete()
+        return redirect(reverse('profil-registered_events'))
+
+
 class DeleteEventView(PersonView):
     def get(self, request, event_id):
-        event = Event.objects.get(pk=event_id)
+        event = get_event_by_id(event_id)
         event.delete()
         return redirect(reverse('profil-events'))
 
@@ -81,8 +113,8 @@ class DeleteEventView(PersonView):
 class EditEventView(PersonView):
     def get(self, request, event_id):
         user = request.user
-        person = Person.objects.get(user=user)
-        event = Event.objects.get(pk=event_id)
+        person = get_person_by_user(user)
+        event = get_event_by_id(event_id)
         form = EventForm(instance=event)
         context = {
             'person': person,
@@ -93,8 +125,8 @@ class EditEventView(PersonView):
 
     def post(self, request, event_id):
         user = request.user
-        person = Person.objects.get(user=user)
-        event = Event.objects.get(pk=event_id)
+        person = get_person_by_user(user)
+        event = get_event_by_id(event_id)
         form = EventForm(instance=event, data=request.POST)
         if form.is_valid():
             event = form.save(commit=False)
@@ -113,11 +145,27 @@ class EditEventView(PersonView):
             return render(request, 'persons/events/my_events_form.html', context)
 
 
-class EventInscriptionView(PersonView):
+class EventDescriptionView(PersonView):
     def get(self, request, event_id):
         user = request.user
-        person = Person.objects.get(user=user)
-        event = Event.objects.get(pk=event_id)
+        person = get_person_by_user(user)
+        event = get_event_by_id(event_id)
+        is_registered = get_if_person_is_registered(person, event)
+        context = {
+            'user': user,
+            'person': person,
+            'event': event,
+            'is_registered': is_registered,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        }
+        return render(request, 'events/event_detail.html', context)
+
+
+class EventInscriptionView(PersonView):
+    def get(self, request, event_id, **kwargs):
+        user = request.user
+        person = get_person_by_user(user)
+        event = get_event_by_id(event_id)
         inscription = InscriptionEvent(person=person, event=event)
         inscription.save()
-        return redirect(reverse('details'))
+        return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
