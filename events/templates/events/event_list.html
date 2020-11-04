@@ -2,32 +2,66 @@
 
 {% block content %}
     <div class="row">
-        {% if events %}
-            <div class="col-md-12 p-0 mt-3">
-                <div class="row">
-                    <h1 class="col-md-7">Évenements</h1>
-                    <div class="col-md-5 text-right">
-                        {% if user.pk %}
-                            <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
-                        {% endif %}
-                    </div>
+        <div class="col-md-12 mt-3">
+            <div class="row">
+                <div class="col-md-7">
+                    <h1>Évenements</h1>
                 </div>
-                {% for event in events %}
-                    <div class="row ">
-                        <div class="col p-0">
-                            <h3 class="col-md-12 p-0 mt-3">{{ event.title|title }} ({{ event.category|title }})</h3>
-                            <p>Par {{ event.person.pseudo }} le {{ event.created_at|date:'d/m/y à h:m' }}</p>
-                            <p>{{ event.city|title }}</p>
-                            {% if user.pk %}
-                                <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de détails</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endfor %}
+                <div class="col-md-5 text-right">
+                    {% if user.pk %}
+                        <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
+                    {% endif %}
+                </div>
+
             </div>
-        {% else %}
-            <p>Il n'y a pas d'évenements pour le moment</p>
-        {% endif %}
+            <div class="row mt-3">
+                <div class="col-md-2 d-md-block">
+                    <b>Category</b>
+                    <ul class="list-unstyled">
+                        {% for value, label, count in category %}
+                            <li>
+                                {% if value == category_filter %}
+                                    <span class="badge badge-pill badge-primary">{{ label }} ({{ count }})</span>
+                                {% else %}
+                                    <a class="badge badge-pill badge-light"
+                                       href="{% url 'details' %}?category_filter={{ value }}&order_filter={{ order_filter }}">{{ label|title }}
+                                        ({{ count }})</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <b>Ordre</b>
+                    <ul class="list-unstyled">
+                        <li>
+
+                            <a class="badge badge-pill badge-{% if order_filter == 'event_date' %}primary{% else %}light{% endif %}" href="{% url 'details' %}?category_filter={{ category_filter }}&order_filter=event_date"><i class="fas fa-arrow-up"></i> Date croissant</a>
+                            <a class="badge badge-pill badge-{% if order_filter == '-event_date' %}primary{% else %}light{% endif %}" href="{% url 'details' %}?category_filter={{ category_filter }}&order_filter=-event_date"><i class="fas fa-arrow-down"></i> Date decroissant</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-8 p-0">
+                    {% if filtered_events %}
+                        {% for event in filtered_events %}
+                            <div class="row">
+                                <div class="col p-0 mb-3">
+                                    <h3 class="col-md-12 p-0">{{ event.title|title }}
+                                        ({{ event.category|title }})</h3>
+                                    <p>Par {{ event.person.pseudo }} le {{ event.created_at|date:'d/m/y à h:m' }}</p>
+                                    <p>{{ event.city|title }}</p>
+                                    {% if user.pk %}
+                                        <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de
+                                            détails</a>
+                                    {% endif %}
+                                    <hr>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p>Il n'y a pas d'évenements pour le moment</p>
+                    {% endif %}
+            </div>
+        </div>
     </div>
 
 {% endblock %}

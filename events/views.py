@@ -6,7 +6,8 @@ from django.views import View
 from events.forms import EventForm
 from events.models import Event, InscriptionEvent
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
-    get_if_person_is_registered, get_inscription_event_person
+    get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
+    get_filtered_events, get_events_categories
 from persons import navigation
 from persons.models import Person
 from persons.views import PersonView
@@ -14,14 +15,24 @@ from persons.views import PersonView
 
 class EventDetailsView(View):
     def get(self, request):
-        events = get_all_events()
         user = request.user
         if user.pk:
             person = get_person_by_user(user)
+            category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
+            events = get_all_events()
+            filtered_events = get_filtered_events(events, category_filter)
+            order_filter = request.GET.get('order_filter', 'event_date')
+            if order_filter == 'event_date':
+                filtered_events = filtered_events.order_by('event_date')
+            else:
+                filtered_events = filtered_events.order_by('-event_date')
             context = {
                 'user': user,
                 'person': person,
-                'events': events,
+                'filtered_events': filtered_events,
+                'category': get_events_categories(events),
+                'order_filter': order_filter,
+                'category_filter': category_filter,
                 'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
             }
@@ -98,7 +109,7 @@ class MyRegisteredEventsView(PersonView):
 
 class DesiscriptionEventView(PersonView):
     def get(self, request, inscription_id):
-        inscription = InscriptionEvent.objects.get(pk=inscription_id)
+        inscription = get_inscription_by_id(inscription_id)
         inscription.delete()
         return redirect(reverse('profil-registered_events'))
 
