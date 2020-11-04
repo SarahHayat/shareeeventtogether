@@ -23,7 +23,7 @@ class Person(models.Model):
     pseudo = models.CharField('pseudo', max_length=50)
     person_type = models.CharField('type', choices=TYPE_CHOICES, max_length=15)
     created_at = models.DateTimeField('crée à', auto_now=True)
-    karma = models.IntegerField('karma', null=True, blank=True)
+    note = models.IntegerField('karma', null=True, blank=True)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

@@ -3,7 +3,7 @@ from django.urls import path, reverse_lazy, include
 from django.contrib.auth import views as auth_views
 
 from events.views import MyEventDetailsView, DeleteEventView, EditEventView, MyRegisteredEventsView, \
-    DesiscriptionEventView
+    DesiscriptionEventView, MyFinishedEventsView
 from persons.views import HomeView, InscriptionView, EditProfilView, DetailProfilView
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     path('profil/events', MyEventDetailsView.as_view(), name='profil-events'),
     path('profil/events', MyEventDetailsView.as_view(), name='profil-events'),
     path('profil/events/registered', MyRegisteredEventsView.as_view(), name='profil-registered_events'),
+    path('profil/events/<int:event_id>/finished/<int:person_id>', MyFinishedEventsView.as_view(), name='profil-finished-events'),
     path('profil/events/<int:inscription_id>/registered/supprimer', DesiscriptionEventView.as_view(), name='desinscription-event'),
     path('profil/events/<int:event_id>/modifier', EditEventView.as_view(), name='edit-event'),
     path('profil/events/<int:event_id>/supprimer', DeleteEventView.as_view(), name='delete-event'),

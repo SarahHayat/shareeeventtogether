@@ -3,11 +3,11 @@ from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views import View
 
-from events.forms import EventForm
-from events.models import Event, InscriptionEvent
+from events.forms import EventForm, KarmaForm
+from events.models import Event, InscriptionEvent, Karma
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
-    get_filtered_events, get_events_categories
+    get_filtered_events, get_events_categories, get_person_by_id
 from persons import navigation
 from persons.models import Person
 from persons.views import PersonView
@@ -96,7 +96,8 @@ class MyRegisteredEventsView(PersonView):
     def get(self, request):
         user = request.user
         person = get_person_by_user(user)
-        inscription_events = get_inscription_event_person(person)
+        today = datetime.now()
+        inscription_events = get_inscription_event_person(person).filter(event__event_date__gt=today)
         context = {
             'user': user,
             'person': person,
@@ -105,6 +106,37 @@ class MyRegisteredEventsView(PersonView):
 
         }
         return render(request, 'persons/events/my_registered_events.html', context)
+
+
+class MyFinishedEventsView(PersonView):
+    def get(self, request):
+        user = request.user
+        person = get_person_by_user(user)
+        today = datetime.now()
+        inscription_events = get_inscription_event_person(person).filter(event__event_date__lt=today)
+        form = KarmaForm()
+        context = {
+            'user': user,
+            'person': person,
+            'form': form,
+            'inscription_events': inscription_events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+
+        }
+        return render(request, 'persons/events/my_finished_events.html', context)
+
+    def post(self, request, person_id, event_id):
+        user = request.user
+        person = get_person_by_id(person_id)
+        event = get_event_by_id(event_id)
+        form = KarmaForm(request.POST)
+        if form.is_valid():
+            karma = form.save(commit=False)
+            karma.event = event
+            karma.person = person
+            karma.save()
+        else:
+            return redirect(reverse('profil-finished-events'))
 
 
 class DesiscriptionEventView(PersonView):

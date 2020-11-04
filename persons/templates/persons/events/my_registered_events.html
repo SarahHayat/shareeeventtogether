@@ -15,6 +15,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -31,11 +34,13 @@
                             <div class="row ">
                                 <div class="col p-0">
 
-                                    <h3 class="col-md-12 p-0 mt-3">{{ inscription.event.title }} ({{ inscription.event.category }})</h3>
-                                    <p>{{ inscription.event.event_date|date:'d/mY à h:m' }}</p>
+                                    <h3 class="col-md-12 p-0 mt-3">{{ inscription.event.title }}
+                                        ({{ inscription.event.category }})</h3>
+                                    <p>{{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
                                     <p>{{ inscription.event.description }}</p>
                                     <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
-                                    <a class="text-danger" data-toggle="modal" data-target="#close_modal">Se désinscire</a>
+                                    <a class="text-danger" data-toggle="modal" data-target="#close_modal">Se
+                                        désinscire</a>
                                 </div>
                             </div>
                             <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"

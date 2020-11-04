@@ -15,6 +15,9 @@ def get_all_events():
 def get_events_by_user(user):
     return Event.objects.filter(person__user=user)
 
+def get_person_by_id(person_id):
+    return Person.objects.get(pk=person_id)
+
 
 def get_event_by_id(event_id):
     return Event.objects.get(pk=event_id)

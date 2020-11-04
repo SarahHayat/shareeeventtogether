@@ -1,5 +1,5 @@
 {% extends 'persons/base_navbar.html' %}
-
+{% load bootstrap4 %}
 {% block content %}
     <div class="row">
         <div class="col">
@@ -23,27 +23,23 @@
 
             </div>
             <div class="row">
-                {% if events %}
+                {% if inscription_events %}
                     <div class="col-md-12 p-0 mt-3">
                         <div class="row">
-                            <h1 class="col-md-7">Mes Évenements</h1>
+                            <h1 class="col-md-7">Mes Inscriptions passées</h1>
                             <div class="col-md-5 text-right">
-                                {% if user.pk %}
-                                    <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
-                                {% endif %}
                             </div>
                         </div>
-                        {% for event in events %}
+                        {% for inscription in inscription_events %}
                             <div class="row ">
                                 <div class="col p-0">
 
-                                    <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>
-                                    <p>{{ event.event_date|date:'d/m - h:m' }}</p>
-                                    <p>{{ event.description }}</p>
-                                    <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
-                                    <a href="{% url 'edit-event' event.pk %}" class="text-primary mr-2">Modifier</a>
-                                    <a href="{% url 'delete-event' event.pk %}" class="text-danger" data-toggle="modal"
-                                       data-target="#close_modal">Supprimer</a>
+                                    <h3 class="col-md-12 p-0 mt-3">{{ inscription.event.title }}
+                                        ({{ inscription.event.category }})</h3>
+                                    <p>{{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
+                                    <p>{{ inscription.event.description }}</p>
+                                    <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
+                                    <a class="text-success" data-toggle="modal" data-target="#close_modal">Noter</a>
                                 </div>
                             </div>
                             <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
@@ -51,22 +47,28 @@
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Supprimer cet évenement</h5>
+                                            <h5 class="modal-title">Noter</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <p>Êtes-vous sûr de vouloir supprimer cet évenement</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-link" type="button" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                <span aria-hidden="true">Annuler</span>
-                                            </button>
-                                            <a href="{% url 'delete-event' event.pk %}"
-                                               class="btn btn-danger">Confirmer</a>
-                                        </div>
+                                        <form method="post">
+                                            <div class="modal-body">
+
+                                                {% csrf_token %}
+                                                {% bootstrap_field form.note required_css_class='required' %}
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-link" type="button" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">Annuler</span>
+                                                </button>
+                                                <a href="{% url 'profil-finished-events' inscription.person.pk inscription.event.pk %}"
+                                                        class="btn btn-success">Confirmer
+                                                </a>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
 
