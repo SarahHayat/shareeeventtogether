@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-5 text-right">
                     {% if user.pk %}
-                        <a class="btn btn-primary" href="{% url 'new-event' %}">Ajouter</a>
+                        <a class="btn btn-primary" href="{% url 'create-event' %}">Ajouter</a>
                     {% endif %}
                 </div>
 
@@ -24,7 +24,7 @@
                                     <span class="badge badge-pill badge-primary">{{ label }} ({{ count }})</span>
                                 {% else %}
                                     <a class="badge badge-pill badge-light"
-                                       href="{% url 'details' %}?category_filter={{ value }}&order_filter={{ order_filter }}">{{ label|title }}
+                                       href="{% url 'events' %}?category_filter={{ value }}&order_filter={{ order_filter }}">{{ label|title }}
                                         ({{ count }})</a>
                                 {% endif %}
                             </li>
@@ -34,8 +34,8 @@
                     <ul class="list-unstyled">
                         <li>
 
-                            <a class="badge badge-pill badge-{% if order_filter == 'event_date' %}primary{% else %}light{% endif %}" href="{% url 'details' %}?category_filter={{ category_filter }}&order_filter=event_date"><i class="fas fa-arrow-up"></i> Date croissant</a>
-                            <a class="badge badge-pill badge-{% if order_filter == '-event_date' %}primary{% else %}light{% endif %}" href="{% url 'details' %}?category_filter={{ category_filter }}&order_filter=-event_date"><i class="fas fa-arrow-down"></i> Date decroissant</a>
+                            <a class="badge badge-pill badge-{% if order_filter == 'event_date' %}primary{% else %}light{% endif %}" href="{% url 'events' %}?category_filter={{ category_filter }}&order_filter=event_date"><i class="fas fa-arrow-up"></i> Date croissant</a>
+                            <a class="badge badge-pill badge-{% if order_filter == '-event_date' %}primary{% else %}light{% endif %}" href="{% url 'events' %}?category_filter={{ category_filter }}&order_filter=-event_date"><i class="fas fa-arrow-down"></i> Date decroissant</a>
                         </li>
                     </ul>
                 </div>

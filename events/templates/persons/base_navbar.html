@@ -23,7 +23,6 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% if user.pk %}
-                            <a class="dropdown-item" href="{% url 'profil' %}"><i class="far fa-user"></i> Profil</a>
                             <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
                         {% else %}
                             <a class="dropdown-item" href="{% url 'login' %}">Connexion / Creer un compte</a>

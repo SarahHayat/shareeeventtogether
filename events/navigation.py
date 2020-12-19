@@ -1,17 +1,15 @@
-from django.urls import reverse_lazy, reverse
-from django.utils.translation import ugettext_lazy as _
+from django.urls import  reverse
 
-from persons.models import Person
 
-NAV_HOME = 'Home'
 NAV_EVENEMENT = 'Evenement'
+NAV_PROFIL = 'Profil'
 
-SHORTCUT_HOME = 'home'
-SHORTCUT_EVENEMENT = 'details'
+SHORTCUT_EVENEMENT = 'events'
+SHORTCUT_PROFIL = 'profil'
 
 NAV_ITEMS = (
-    (NAV_HOME, SHORTCUT_HOME),
     (NAV_EVENEMENT, SHORTCUT_EVENEMENT),
+    (NAV_PROFIL, SHORTCUT_PROFIL),
 )
 
 

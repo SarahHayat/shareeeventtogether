@@ -1,12 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views import View
 
-from persons import navigation
-from persons.forms import PersonForm, ProfilForm
+from events import navigation
+from events.forms import PersonForm, ProfilForm
 from persons.models import Person
 from users.models import User
 
@@ -20,9 +19,8 @@ class HomeView(View):
         user = request.user
         context = {
             'user': user,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
-        return render(request, 'persons/home.html', context)
+        return True
 
 
 class InscriptionView(View):
@@ -42,7 +40,7 @@ class InscriptionView(View):
             person.user = user
             person.created_at = datetime.now()
             person.save()
-            return redirect(reverse('home'))
+            return redirect(reverse('events'))
         else:
             return redirect(reverse('login'))
 
@@ -55,7 +53,7 @@ class DetailProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'persons/profil/profil_detail.html', context)
 
@@ -68,7 +66,7 @@ class EditProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'persons/profil/profil_edit.html', context)
 
@@ -86,7 +84,7 @@ class EditProfilView(PersonView):
             context = {
                 'person': person,
                 'form': form,
-                'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
             }
             return render(request, 'persons/profil/profil_edit.html', context)

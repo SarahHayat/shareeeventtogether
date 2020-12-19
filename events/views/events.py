@@ -4,13 +4,12 @@ from django.utils.datetime_safe import datetime
 from django.views import View
 
 from events.forms import EventForm, KarmaForm
-from events.models import Event, InscriptionEvent, Karma
+from events.models import InscriptionEvent
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
     get_filtered_events, get_events_categories, get_person_by_id
-from persons import navigation
-from persons.models import Person
-from persons.views import PersonView
+from events import navigation
+from events.views.persons import PersonView
 
 
 class EventDetailsView(View):
@@ -57,6 +56,7 @@ class EventCreateView(PersonView):
             'user': user,
             'person': person,
             'form': form,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'events/event_new.html', context)
 
@@ -69,16 +69,19 @@ class EventCreateView(PersonView):
             event.person = person
             event.created_at = datetime.now()
             event.save()
-            return redirect(reverse('details'))
+            return redirect(reverse('events'))
         else:
             form = EventForm()
             context = {
-                'form': form
+                'user': user,
+                'person': person,
+                'form': form,
+                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
             }
             return render(request, 'events/event_new.html', context)
 
 
-class MyEventDetailsView(PersonView):
+class ProfileEventDetailsView(PersonView):
     def get(self, request):
         user = request.user
         events = get_events_by_user(user)
@@ -86,13 +89,13 @@ class MyEventDetailsView(PersonView):
         context = {
             'user': user,
             'events': events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
 
         }
         return render(request, 'persons/events/my_events_details.html', context)
 
 
-class MyRegisteredEventsView(PersonView):
+class ProfileRegisteredEventsView(PersonView):
     def get(self, request):
         user = request.user
         person = get_person_by_user(user)
@@ -102,13 +105,13 @@ class MyRegisteredEventsView(PersonView):
             'user': user,
             'person': person,
             'inscription_events': inscription_events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
 
         }
         return render(request, 'persons/events/my_registered_events.html', context)
 
 
-class MyFinishedEventsView(PersonView):
+class ProfileFinishedEventsView(PersonView):
     def get(self, request):
         user = request.user
         person = get_person_by_user(user)
@@ -120,7 +123,7 @@ class MyFinishedEventsView(PersonView):
             'person': person,
             'form': form,
             'inscription_events': inscription_events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
 
         }
         return render(request, 'persons/events/my_finished_events.html', context)
@@ -139,7 +142,7 @@ class MyFinishedEventsView(PersonView):
             return redirect(reverse('profil-finished-events'))
 
 
-class DesiscriptionEventView(PersonView):
+class DesinscriptionEventView(PersonView):
     def get(self, request, inscription_id):
         inscription = get_inscription_by_id(inscription_id)
         inscription.delete()
@@ -162,7 +165,7 @@ class EditEventView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'persons/events/my_events_form.html', context)
 
@@ -182,7 +185,7 @@ class EditEventView(PersonView):
             context = {
                 'person': person,
                 'form': form,
-                'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
             }
             return render(request, 'persons/events/my_events_form.html', context)
