@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shareeventtogether.wsgi.application'
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'events'
 
 AUTH_USER_MODEL = 'users.User'
 

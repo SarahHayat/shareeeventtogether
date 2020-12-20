@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
 from events.models import Event, Karma
 from persons.models import Person
@@ -18,7 +17,7 @@ class EventForm(forms.ModelForm):
 class KarmaForm(forms.ModelForm):
     class Meta:
         model = Karma
-        fields = ('note',)
+        exclude = ['person', 'event', ]
         widgets = {
             'note': forms.NumberInput(attrs={'max': 10, 'min': 0})
         }

@@ -1,10 +1,11 @@
+from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views import View
 
 from events.forms import EventForm, KarmaForm
-from events.models import InscriptionEvent
+from events.models import InscriptionEvent, Event
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
     get_filtered_events, get_events_categories, get_person_by_id
@@ -128,18 +129,28 @@ class ProfileFinishedEventsView(PersonView):
         }
         return render(request, 'persons/events/my_finished_events.html', context)
 
-    def post(self, request, person_id, event_id):
-        user = request.user
-        person = get_person_by_id(person_id)
-        event = get_event_by_id(event_id)
-        form = KarmaForm(request.POST)
-        if form.is_valid():
-            karma = form.save(commit=False)
-            karma.event = event
-            karma.person = person
-            karma.save()
-        else:
-            return redirect(reverse('profil-finished-events'))
+
+class ProfileRatingFinishedEventsView(PersonView):
+
+    def post(self, request, event_id, person_id, *args, **kwargs):
+        try:
+            user = request.user
+            user_person = get_person_by_user(user)
+            person = get_person_by_id(person_id)
+            event = get_event_by_id(event_id)
+            form = KarmaForm(data=request.POST)
+            if form.is_valid():
+                karma = form.save(commit=False)
+                karma.event = event
+                karma.person = person
+                person.note = karma.note
+                person.save()
+                karma.save()
+                return redirect(reverse('profil-finished-events'))
+            else:
+                return redirect(reverse('events'))
+        except Event.DoesNotExist:
+            raise Http404()
 
 
 class DesinscriptionEventView(PersonView):
