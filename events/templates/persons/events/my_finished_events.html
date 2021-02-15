@@ -36,7 +36,12 @@
                                 <p>{{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
                                 <p>{{ inscription.event.description }}</p>
                                 <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
-                                <a class="text-success {% if not inscription %}disabled{% endif %}" data-toggle="modal" data-target="#close_modal">Noter</a>
+{#                                    <p>KARAMAAAAAA</p>{{ inscription.getKarma }}#}
+                                {% if inscription.getKarma%}
+                                    <p class="text-success">{{ inscription.getKarma }}/10</p>
+                                {% else %}
+                                    <a class="text-success {% if not inscription %}disabled{% endif %}" data-toggle="modal" data-target="#close_modal">Noter</a>
+                                {% endif %}
                             </div>
                         </div>
                         <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"

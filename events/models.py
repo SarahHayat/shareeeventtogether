@@ -35,6 +35,11 @@ class InscriptionEvent(models.Model):
     person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
 
+    def getKarma(self):
+        print("HELLO")
+        print(f' KARMA {Karma.objects.get(person=self.person, event=self.event)}')
+        return Karma.objects.get(person=self.person, event=self.event).note
+
     def __str__(self):
         return f'{self.person.pseudo} - {self.event.title}'
 

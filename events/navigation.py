@@ -3,11 +3,14 @@ from django.urls import  reverse
 
 NAV_EVENEMENT = 'Evenement'
 NAV_PROFIL = 'Profil'
+NAV_HOME = 'Home'
 
 SHORTCUT_EVENEMENT = 'events'
 SHORTCUT_PROFIL = 'profil'
+SHORTCUT_HOME = 'home'
 
 NAV_ITEMS = (
+    (NAV_HOME, SHORTCUT_HOME),
     (NAV_EVENEMENT, SHORTCUT_EVENEMENT),
     (NAV_PROFIL, SHORTCUT_PROFIL),
 )

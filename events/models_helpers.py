@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from events.models import Event, InscriptionEvent
 from persons.models import Person
 
@@ -9,7 +11,7 @@ def get_person_by_user(user):
 
 
 def get_all_events():
-    return Event.objects.all()
+    return Event.objects.all().filter(event_date__gte=timezone.now())
 
 
 def get_events_by_user(user):

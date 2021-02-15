@@ -5,7 +5,7 @@ from django.utils.datetime_safe import datetime
 from django.views import View
 
 from events.forms import EventForm, KarmaForm
-from events.models import InscriptionEvent, Event
+from events.models import InscriptionEvent, Event, Karma
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
     get_filtered_events, get_events_categories, get_person_by_id
@@ -142,7 +142,7 @@ class ProfileRatingFinishedEventsView(PersonView):
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
-                karma.person = person
+                karma.person = user_person
                 person.note = karma.note
                 person.save()
                 karma.save()
