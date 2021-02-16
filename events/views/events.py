@@ -140,20 +140,17 @@ class ProfileRatingFinishedEventsView(PersonView):
         try:
             user = request.user
             person = get_person_by_user(user)
-            # person = get_person_by_id(person_id)
             event = get_event_by_id(event_id)
+            person_event = get_person_by_id(event.person.pk)
             form = KarmaForm(data=request.POST)
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
                 karma.person = person
                 karma.save()
-
-                # moyenne = Karma.objects.all().aggregate(Avg('note'))
-                # print('moyenne')
-                # print(moyenne)
-                # person.note = moyenne
-                person.save()
+                note = Karma.objects.filter(event__person=event.person).aggregate(Avg('note'))
+                person_event.note = note['note__avg']
+                person_event.save()
                 return redirect(reverse('profil-finished-events'))
             else:
                 return redirect(reverse('events'))
@@ -239,7 +236,7 @@ class EventInscriptionView(PersonView):
 class SearchView(PersonView):
     def get(self, request):
         query = self.request.GET.get('q')
-        events = Event.objects.filter( Q(title__unaccent__icontains=query) | Q(category__unaccent__icontains=query))
+        events = Event.objects.filter( Q(title__icontains=query) | Q(category__icontains=query))
         user = request.user
         person = get_person_by_user(user)
         context = {

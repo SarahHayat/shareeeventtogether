@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'persons.apps.PersonsConfig',
     'events.apps.EventsConfig',
-    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

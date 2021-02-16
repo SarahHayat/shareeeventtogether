@@ -37,15 +37,14 @@
                                 <p>{{ inscription.event.person }} - {{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
                                 <p>{{ inscription.event.description }}</p>
                                 <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
-                                    {{ inscription.event.pk }} - {{ inscription.person.pk }}
                                 {% if inscription.getKarma %}
                                     <p class="text-success">{{ inscription.getKarma }}/10</p>
                                 {% else %}
-                                    <a class="text-success" data-toggle="modal" data-target="#rating_modal">Noter</a>
+                                    <a class="text-success" data-toggle="modal" data-target="#rating_modal_{{ inscription.event.pk }}">Noter</a>
                                 {% endif %}
                             </div>
                         </div>
-                        <div id="rating_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
+                        <div id="rating_modal_{{ inscription.event.pk }}" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
                              data-keyboard="false">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
