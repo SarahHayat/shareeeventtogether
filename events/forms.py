@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from events.models import Event, Karma
 from persons.models import Person
@@ -10,7 +11,7 @@ class EventForm(forms.ModelForm):
         model = Event
         exclude = ['person', 'created_at']
         widgets = {
-            'event_date': forms.DateTimeInput(attrs={'type': 'datetime-local', })
+            'event_date': forms.DateTimeInput(attrs={'type': 'datetime-local'})
         }
 
 

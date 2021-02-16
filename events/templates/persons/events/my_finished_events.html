@@ -1,5 +1,6 @@
 {% extends 'persons/base_navbar.html' %}
 {% load bootstrap4 %}
+{% load static %}
 {% block content %}
     <div class="row">
         <div class="col">
@@ -36,15 +37,15 @@
                                 <p>{{ inscription.event.person }} - {{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
                                 <p>{{ inscription.event.description }}</p>
                                 <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
-{#                                    <p>KARAMAAAAAA</p>{{ inscription.getKarma }}#}
-                                {% if inscription.getKarma%}
+                                    {{ inscription.event.pk }} - {{ inscription.person.pk }}
+                                {% if inscription.getKarma %}
                                     <p class="text-success">{{ inscription.getKarma }}/10</p>
                                 {% else %}
-                                    <a class="text-success" data-toggle="modal" data-target="#close_modal">Noter</a>
+                                    <a class="text-success" data-toggle="modal" data-target="#rating_modal">Noter</a>
                                 {% endif %}
                             </div>
                         </div>
-                        <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
+                        <div id="rating_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
                              data-keyboard="false">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -54,7 +55,7 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form method="post" action="{% url 'profil-rating-finished-events' inscription.event.pk inscription.event.person.pk %}">
+                                    <form method="post" action="{% url 'profil-rating-finished-events' inscription.event.pk %}">
                                         <div class="modal-body">
                                             {% csrf_token %}
                                             {% bootstrap_field form.note required_css_class='required' %}
@@ -78,4 +79,33 @@
             </div>
         </div>
     </div>
+<script>
+{#$(document).on("click", "#rating", function () {#}
+{#    console.log('CLICK')#}
+{#     var event_id = $(this).data('id');#}
+{#     $(".modal-body ").val( myBookId );#}
+{#     // As pointed out in comments,#}
+{#     // it is unnecessary to have to manually call the modal.#}
+{#     // $('#addBookDialog').modal('show');#}
+
+
+$(document).ready(function () {
+
+    $('#rating').on('click', function (e) {
+        console.log('CLICK')
+        let id = $('#rating').attr('data-id')
+        //let url = $(this).attr("href")
+        if (id != null) {
+            //url = url + '?event=' + id
+            window.history.replaceState(null, null, "?event="+id);
+        }
+
+    })
+
+})
+
+
+</script>
+{% endblock %}
+{% block extra_js %}
 {% endblock %}

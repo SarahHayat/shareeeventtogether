@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 
 
 class Event(models.Model):
@@ -36,8 +37,6 @@ class InscriptionEvent(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
 
     def getKarma(self):
-        print("HELLO")
-        print(f' KARMA {Karma.objects.get(person=self.person, event=self.event)}')
         return Karma.objects.get(person=self.person, event=self.event).note
 
     def __str__(self):
@@ -48,6 +47,7 @@ class Karma(models.Model):
     person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
     event = models.ForeignKey('Event', on_delete=models.CASCADE)
     note = models.IntegerField('Note', default=0)
+
 
     def __str__(self):
         return f'{self.person}-{self.event}-{self.note}'

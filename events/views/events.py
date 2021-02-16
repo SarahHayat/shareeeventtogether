@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -119,6 +120,7 @@ class ProfileFinishedEventsView(PersonView):
         today = datetime.now()
         inscription_events = get_inscription_event_person(person).filter(event__event_date__lt=today)
         form = KarmaForm()
+
         context = {
             'user': user,
             'person': person,
@@ -132,20 +134,24 @@ class ProfileFinishedEventsView(PersonView):
 
 class ProfileRatingFinishedEventsView(PersonView):
 
-    def post(self, request, event_id, person_id, *args, **kwargs):
+    def post(self, request, event_id, *args, **kwargs):
         try:
             user = request.user
-            user_person = get_person_by_user(user)
-            person = get_person_by_id(person_id)
+            person = get_person_by_user(user)
+            # person = get_person_by_id(person_id)
             event = get_event_by_id(event_id)
             form = KarmaForm(data=request.POST)
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
-                karma.person = user_person
-                person.note = karma.note
-                person.save()
+                karma.person = person
                 karma.save()
+
+                # moyenne = Karma.objects.all().aggregate(Avg('note'))
+                # print('moyenne')
+                # print(moyenne)
+                # person.note = moyenne
+                person.save()
                 return redirect(reverse('profil-finished-events'))
             else:
                 return redirect(reverse('events'))
