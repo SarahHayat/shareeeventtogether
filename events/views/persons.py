@@ -19,8 +19,9 @@ class HomeView(View):
         user = request.user
         context = {
             'user': user,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
-        return True
+        return render(request, 'persons/home.html', context)
 
 
 class InscriptionView(View):
@@ -33,7 +34,12 @@ class InscriptionView(View):
 
     def post(self, request):
         form = PersonForm(request.POST)
+        print('Before')
+        print(form.errors)
+
         if form.is_valid():
+            print('after')
+            print(form)
             person = form.save(commit=False)
             user = User.objects.create_user(form.cleaned_data['email'], form.cleaned_data['password'])
             user.save()
@@ -53,7 +59,7 @@ class DetailProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
         }
         return render(request, 'persons/profil/profil_detail.html', context)
 

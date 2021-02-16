@@ -46,7 +46,7 @@
                                 <div class="col p-0 mb-3">
                                     <h3 class="col-md-12 p-0">{{ event.title|title }}
                                         ({{ event.category|title }})</h3>
-                                    <p>Par {{ event.person.pseudo }} le {{ event.created_at|date:'d/m/y à h:m' }}</p>
+                                    <p>Par {{ event.person.pseudo }} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
                                     <p>{{ event.city|title }}</p>
                                     {% if user.pk %}
                                         <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de

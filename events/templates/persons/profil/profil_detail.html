@@ -15,7 +15,7 @@
             <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Mes inscriptions passées</a>
+            <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
         </li>
     </ul>
     <div class="row my-3">
@@ -55,7 +55,7 @@
             <p>
                 <b>Anniversaire</b>
                 <br>
-                {{ person.birth_date }}
+                {{ person.birth_date|date:'j/m' }}
             </p>
         </div>
     </div>

@@ -1,14 +1,17 @@
+from django.db.models import Avg
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views import View
+from django.db.models import Q
 
 from events.forms import EventForm, KarmaForm
-from events.models import InscriptionEvent, Event
+from events.models import InscriptionEvent, Event, Karma
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
     get_filtered_events, get_events_categories, get_person_by_id
+
 from events import navigation
 from events.views.persons import PersonView
 
@@ -119,6 +122,7 @@ class ProfileFinishedEventsView(PersonView):
         today = datetime.now()
         inscription_events = get_inscription_event_person(person).filter(event__event_date__lt=today)
         form = KarmaForm()
+
         context = {
             'user': user,
             'person': person,
@@ -132,20 +136,21 @@ class ProfileFinishedEventsView(PersonView):
 
 class ProfileRatingFinishedEventsView(PersonView):
 
-    def post(self, request, event_id, person_id, *args, **kwargs):
+    def post(self, request, event_id, *args, **kwargs):
         try:
             user = request.user
-            user_person = get_person_by_user(user)
-            person = get_person_by_id(person_id)
+            person = get_person_by_user(user)
             event = get_event_by_id(event_id)
+            person_event = get_person_by_id(event.person.pk)
             form = KarmaForm(data=request.POST)
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
                 karma.person = person
-                person.note = karma.note
-                person.save()
                 karma.save()
+                note = Karma.objects.filter(event__person=event.person).aggregate(Avg('note'))
+                person_event.note = note['note__avg']
+                person_event.save()
                 return redirect(reverse('profil-finished-events'))
             else:
                 return redirect(reverse('events'))
@@ -172,6 +177,7 @@ class EditEventView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
+        print(event.event_date)
         form = EventForm(instance=event)
         context = {
             'person': person,
@@ -226,3 +232,17 @@ class EventInscriptionView(PersonView):
         inscription = InscriptionEvent(person=person, event=event)
         inscription.save()
         return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
+
+class SearchView(PersonView):
+    def get(self, request):
+        query = self.request.GET.get('q')
+        events = Event.objects.filter( Q(title__icontains=query) | Q(category__icontains=query))
+        user = request.user
+        person = get_person_by_user(user)
+        context = {
+            'user': user,
+            'person': person,
+            'events': events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        }
+        return render(request, 'events/event_search.html', context)
