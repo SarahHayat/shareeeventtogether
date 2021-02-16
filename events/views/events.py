@@ -4,12 +4,14 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views import View
+from django.db.models import Q
 
 from events.forms import EventForm, KarmaForm
 from events.models import InscriptionEvent, Event, Karma
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
     get_filtered_events, get_events_categories, get_person_by_id
+
 from events import navigation
 from events.views.persons import PersonView
 
@@ -233,3 +235,17 @@ class EventInscriptionView(PersonView):
         inscription = InscriptionEvent(person=person, event=event)
         inscription.save()
         return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
+
+class SearchView(PersonView):
+    def get(self, request):
+        query = self.request.GET.get('q')
+        events = Event.objects.filter( Q(title__unaccent__icontains=query) | Q(category__unaccent__icontains=query))
+        user = request.user
+        person = get_person_by_user(user)
+        context = {
+            'user': user,
+            'person': person,
+            'events': events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        }
+        return render(request, 'events/event_search.html', context)
