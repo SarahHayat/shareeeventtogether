@@ -172,6 +172,7 @@ class EditEventView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
+        print(event.event_date)
         form = EventForm(instance=event)
         context = {
             'person': person,
