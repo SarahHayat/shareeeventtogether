@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 from events.views.events import ProfileEventDetailsView, DeleteEventView, EditEventView, ProfileRegisteredEventsView, \
     DesinscriptionEventView, ProfileFinishedEventsView, EventDetailsView, EventCreateView, EventInscriptionView, \
-    EventDescriptionView, ProfileRatingFinishedEventsView, SearchView
+    EventDescriptionView, ProfileRatingFinishedEventsView
 from events.views.persons import InscriptionView, EditProfilView, DetailProfilView, HomeView
 
 urlpatterns = [
@@ -26,5 +26,5 @@ urlpatterns = [
     path('profile/evenements/<int:inscription_id>/inscris/supprimer', DesinscriptionEventView.as_view(), name='desinscription-event'),
     path('profile/evenements/<int:event_id>/modifier', EditEventView.as_view(), name='edit-event'),
     path('profile/evenements/<int:event_id>/supprimer', DeleteEventView.as_view(), name='delete-event'),
-    path('recherche', SearchView.as_view(), name='search')
+    # path('recherche', SearchView.as_view(), name='search')
 ]

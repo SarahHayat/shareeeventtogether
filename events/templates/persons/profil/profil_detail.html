@@ -103,7 +103,11 @@
             <p>
                 <b>Karma</b>
                 <br>
-                {{ person.karma }}
+                {% if person.note is not None %}
+                    {{ person.note }}
+                {% else %}
+                    <span>Vous n'avez pas de note pour le moment :(</span>
+                {% endif %}
             </p>
         </div>
     </div>

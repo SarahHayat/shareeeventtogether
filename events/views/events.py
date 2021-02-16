@@ -2,6 +2,7 @@ from django.db.models import Avg
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views import View
 from django.db.models import Q
@@ -20,10 +21,17 @@ class EventDetailsView(View):
     def get(self, request):
         user = request.user
         if user.pk:
+            query = self.request.GET.get('q')
             person = get_person_by_user(user)
             category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
-            events = get_all_events()
-            filtered_events = get_filtered_events(events, category_filter)
+            if query is not None:
+                events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(event_date__gte=timezone.now())
+                filtered_events = get_filtered_events(events_search, category_filter)
+                category = get_events_categories(events_search)
+            else:
+                events = get_all_events()
+                filtered_events = get_filtered_events(events, category_filter)
+                category = get_events_categories(events)
             order_filter = request.GET.get('order_filter', 'event_date')
             if order_filter == 'event_date':
                 filtered_events = filtered_events.order_by('event_date')
@@ -33,9 +41,10 @@ class EventDetailsView(View):
                 'user': user,
                 'person': person,
                 'filtered_events': filtered_events,
-                'category': get_events_categories(events),
+                'category': category,
                 'order_filter': order_filter,
                 'category_filter': category_filter,
+                'query': query,
                 'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
             }
@@ -232,17 +241,3 @@ class EventInscriptionView(PersonView):
         inscription = InscriptionEvent(person=person, event=event)
         inscription.save()
         return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
-
-class SearchView(PersonView):
-    def get(self, request):
-        query = self.request.GET.get('q')
-        events = Event.objects.filter( Q(title__icontains=query) | Q(category__icontains=query))
-        user = request.user
-        person = get_person_by_user(user)
-        context = {
-            'user': user,
-            'person': person,
-            'events': events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
-        }
-        return render(request, 'events/event_search.html', context)
