@@ -12,12 +12,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil-events' %}">Events</a>
                         </li>
+                        {% if person.person_type != "professionnel" %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
                         </li>
+                        {% endif %}
                     </ul>
                 </div>
 
@@ -35,7 +37,10 @@
 
                                 <h3 class="col mt-3">{{ inscription.event.title }}
                                     ({{ inscription.event.category }})</h3>
-                                <p>{{ inscription.event.event_date|date:'d/m/Y à h:m' }}</p>
+                                <p>Par {% if inscription.event.person.pk is not person.pk %}
+                                    <a href="{% url 'profil-show-user' inscription.event.person.pk %}">{{ inscription.event.person.pseudo }}</a> {% else %}
+                                    {{ inscription.event.person.pseudo }} {% endif %} le {{ inscription.event.event_date|date:'d/m/y à h:m' }}
+                                </p>
                                 <p>{{ inscription.event.description }}</p>
                                 <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>
                                 <a class="text-danger" data-toggle="modal" data-target="#close_modal">Se

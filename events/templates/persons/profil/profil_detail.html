@@ -1,5 +1,5 @@
 {% extends 'persons/base_navbar.html' %}
-
+{% load static %}
 
 {% block title %}Profil{% endblock %}
 
@@ -11,17 +11,23 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'profil-events' %}">Events</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
-        </li>
+        {% if person.person_type != "professionnel" %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
+            </li>
+        {% endif %}
     </ul>
     <div class="row my-3">
         <div class="col-md-8">
-            <h1>Mon Profil</h1>
-            <h2>{{ person.pseudo }} ({{ person.person_type }})</h2>
+            <div>
+                <h2 class="display-1">{{ person.pseudo }}</h2>
+                <p class="text-muted"> ({{ person.person_type }})</p>
+            </div>
+            <img class="rounded-circle mr-5" height="70" width="70" src="{{ person.imageProfil.url }}">
+
         </div>
         <div class="col-md-4 text-right">
             <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>

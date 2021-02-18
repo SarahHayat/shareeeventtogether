@@ -26,6 +26,9 @@
                                 {% else %}
                                     <a class="badge badge-pill badge-light"
                                        href="{% url 'events' %}?category_filter={{ value }}&order_filter=
+
+
+
                                                {{ order_filter }}{% if query is not None %}&q={{ query }}{% endif %}">{{ label|title }}
                                         ({{ count }})</a>
                                 {% endif %}
@@ -50,20 +53,28 @@
                         {% for event in filtered_events %}
                             <div class="row">
                                 <div class="col p-0 mb-3">
-                                <div class="d-flex align-items-center">
-                                    <h3 class="col-md-12 p-0">{{ event.title|title }}
-                                        ({{ event.category|title }}) </h3>
-                                     {% if event.person.note is not None %}
-                                        {% if event.person.note >= 7 %}
-                                            <img height="25" width="25" src="{% static 'assets/good.svg' %}">
-                                        {% elif event.person.note < 7 and event.person.note >= 4 %}
-                                            <img height="25" width="25" src="{% static 'assets/average.svg' %}">
-                                        {% else %}
-                                            <img height="25" width="25" src="{% static 'assets/bad.svg' %}">
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
-                                    <p>Par {{ event.person.pseudo }} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-10 d-flex align-items-center">
+                                            <h3>{{ event.title|title }}
+                                                ({{ event.category|title }})</h3>
+                                            <span class="badge badge-pill badge-info h6">{{ event.person.person_type }}</span>
+                                        </div>
+                                        <div class="col-2 text-right">
+                                            {% if event.person.note is not None %}
+                                                {% if event.person.note >= 7 %}
+                                                    <img height="25" width="25" src="{% static 'assets/good.svg' %}">
+                                                {% elif event.person.note < 7 and event.person.note >= 4 %}
+                                                    <img height="25" width="25" src="{% static 'assets/average.svg' %}">
+                                                {% else %}
+                                                    <img height="25" width="25" src="{% static 'assets/bad.svg' %}">
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <p>Par {% if event.person.pk is not person.pk %}
+                                        <a href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
+                                        {{ event.person.pseudo }} {% endif %}
+                                        le {{ event.event_date|date:'d/m/y à h:m' }}</p>
 
                                     <p>{{ event.city|title }}</p>
                                     {% if user.pk %}

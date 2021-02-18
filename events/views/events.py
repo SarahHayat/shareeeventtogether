@@ -98,10 +98,11 @@ class ProfileEventDetailsView(PersonView):
     def get(self, request):
         user = request.user
         events = get_events_by_user(user)
-        user = request.user
+        person = get_person_by_user(user)
         context = {
             'user': user,
             'events': events,
+            'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
 
         }
