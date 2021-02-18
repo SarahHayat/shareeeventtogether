@@ -1,0 +1,37 @@
+{% extends 'persons/base_navbar.html' %}
+{% load static %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil-show-user' person.pk %}">Profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil-show-events' person.pk %}">Events</a>
+        </li>
+    </ul>
+    <div class="row">
+        <div class="col mt-3">
+            <div class="row">
+                <h1 class="col-md-7">Mes Évenements</h1>
+            </div>
+            {% for event in events %}
+                <div class="row ">
+                    <div class="col">
+                        <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>
+                        <p>{{ event.event_date|date:'d/m - h:m' }}</p>
+                        <p>{{ event.description }}</p>
+                        <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                        <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Voir les details</a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Il n'y a pas d'évenements pour le moment</p>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock content %}
+

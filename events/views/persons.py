@@ -1,11 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views import View
 
 from events import navigation
 from events.forms import PersonForm, ProfilForm
+from events.models import Event, InscriptionEvent
+from events.models_helpers import get_person_by_id, get_if_person_is_registered
 from persons.models import Person
 from users.models import User
 
@@ -94,3 +97,32 @@ class EditProfilView(PersonView):
 
             }
             return render(request, 'persons/profil/profil_edit.html', context)
+
+
+class ProfilShowUserView(PersonView):
+    def get(self, request, person_id):
+        person = get_person_by_id(person_id)
+        user = request.user
+        context = {
+            'person': person,
+            'user': user,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        }
+
+        return render(request, 'persons/profil/profil_show_user.html', context)
+
+
+class ProfilShowEventView(PersonView):
+
+    def get(self, request, person_id):
+        person = get_person_by_id(person_id)
+        user = request.user
+        events = Event.objects.filter(person=person, event_date__gte=timezone.now())
+        context = {
+            'person': person,
+            'user': user,
+            'events': events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+        }
+
+        return render(request, 'persons/profil/profil_show_events.html', context)

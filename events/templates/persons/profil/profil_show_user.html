@@ -1,0 +1,78 @@
+{% extends 'persons/base_navbar.html' %}
+{% load static %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil-show-user' person.pk %}">Profil</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'profil-show-events' person.pk %}">Events</a>
+        </li>
+    </ul>
+    <div class="row my-3">
+        <div class="col-md-8">
+            <div>
+                <h2 class="display-1">{{ person.pseudo }}</h2>
+                <p class="text-muted"> ({{ person.person_type }})</p>
+            </div>
+            <img class="rounded-circle mr-5" height="70" width="70" src="{{ person.imageProfil.url }}">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Prénom</b>
+                <br>
+                {{ person.first_name }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Nom</b>
+                <br>
+                {{ person.last_name }}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Email</b>
+                <br>
+                {{ person.user.email }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Karma</b>
+                <br>
+                {% if person.note is not None %}
+                    {{ person.note }}
+                {% else %}
+                    <span>Cette personne n'a pas de note pour le moment :(</span>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <b>Ville</b>
+                <br>
+                {{ person.city }}
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+                <b>Pays</b>
+                <br>
+                {{ person.country }}
+            </p>
+        </div>
+    </div>
+{% endblock content %}
+

@@ -7,7 +7,9 @@
             <div class="col p-0 mt-3 text-center">
                 <h1>{{ event.title|title }} <span
                         class="badge badge-pill badge-primary">{{ event.category|title }}</span></h1>
-                <p>Par {{ event.person.pseudo }} le {{ event.event_date|date:'d/m/Y à h:m' }}</p>
+                <p>Par {% if event.person.pk is not person.pk %}
+                    <a href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
+                    {{ event.person.pseudo }} {% endif %} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
                 <hr>
                 <h4>Description :</h4>
                 <p>{{ event.description }}</p>
