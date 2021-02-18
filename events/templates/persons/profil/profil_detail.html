@@ -11,12 +11,14 @@
         <li class="nav-item">
             <a class="nav-link" href="{% url 'profil-events' %}">Events</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
-        </li>
+        {% if person.person_type != "professionnel" %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
+            </li>
+        {% endif %}
     </ul>
     <div class="row my-3">
         <div class="col-md-8">

@@ -16,7 +16,7 @@
                 <hr>
                 <h4>Lieu :</h4>
                 <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
-                {% if user.pk %}
+                {% if user.pk and person.person_type != "professionnel" %}
                     {% if person != event.person %}
                         {% if is_registered %}
                             <p>Rendez-vous sur votre profil pour vous désinscrire</p>
