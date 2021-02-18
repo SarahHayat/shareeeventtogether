@@ -77,10 +77,12 @@ class EventCreateView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         form = EventForm(request.POST)
+        print(form.errors)
         if form.is_valid():
             event = form.save(commit=False)
             event.person = person
             event.created_at = datetime.now()
+
             event.save()
             return redirect(reverse('events'))
         else:

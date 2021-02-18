@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load bootstrap4 %}
 {% load static %}
+{% load leaflet_tags %}
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +9,8 @@
     {% bootstrap_css %}
     <link rel="stylesheet" href="{% static 'fontawesome/css/fontawesome.min.css' %}">
     {% bootstrap_javascript jquery='full' %}
+    {% leaflet_js %}
+    {% leaflet_css %}
 </head>
 <body>
 <header>

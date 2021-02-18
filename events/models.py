@@ -1,4 +1,5 @@
 from django.db import models
+import requests
 
 
 class Event(models.Model):
@@ -23,6 +24,23 @@ class Event(models.Model):
     category = models.CharField('categorie', choices=CATEGORY_CHOICES, max_length=20)
     created_at = models.DateTimeField('crée à', auto_now=True)
     event_date = models.DateTimeField('date evenement', auto_now=False)
+    coordonate_x = models.CharField('coordonnée X',max_length=10 ,null=True, blank=True)
+    coordonate_y = models.CharField('coordonnée Y',max_length=10 , null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={self.address}&postcode={self.zip_code}&city={self.city}&autocomplete=0&limit=1")
+        reponse = api_request.json()
+
+        coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
+        coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
+
+        self.address = reponse['features'][0]['properties']['name']
+        self.zip_code = reponse['features'][0]['properties']['postcode']
+        self.city = reponse['features'][0]['properties']['city']
+        self.coordonate_x = str(coordonate_x).replace(",", ".")
+        self.coordonate_y = str(coordonate_y).replace(",", ".")
+
+        super().save(*args, **kwargs)
 
     def getEventId(self):
         return self.pk

@@ -3,6 +3,7 @@ beautifulsoup4==4.9.3
 Django==3.1.2
 django-bootstrap-fields==0.1.6
 django-bootstrap4==2.3.1
+django-leaflet==0.27.1
 django-phonenumber-field==5.0.0
 phonenumbers==8.12.12
 pytz==2020.1

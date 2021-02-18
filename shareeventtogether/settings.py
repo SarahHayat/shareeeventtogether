@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'persons.apps.PersonsConfig',
     'events.apps.EventsConfig',
+    'leaflet',
+    'places',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +122,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+PLACES_MAPS_API_KEY='YourAwesomeUltraSecretKey'
+PLACES_MAP_WIDGET_HEIGHT=480
+PLACES_MAP_OPTIONS='{"center": { "lat": 38.971584, "lng": -95.235072 }, "zoom": 10}'
+PLACES_MARKER_OPTIONS='{"draggable": true}'
 
 
 # Static files (CSS, JavaScript, Images)
