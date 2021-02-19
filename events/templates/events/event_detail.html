@@ -4,7 +4,7 @@
 {% block content %}
 
 
-     {% leaflet_map "map" callback="window.map_init_basic"%}
+
     <div class="row">
         <a class="text-primary" href="{% url 'events' %}"><i class="fa fa-arrow-left"></i> retour</a>
         {% if event %}
@@ -20,6 +20,7 @@
                 <hr>
                 <h4>Lieu :</h4>
                 <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                {% leaflet_map "map" callback="window.map_init_basic"%}
                 {% if user.pk and person.person_type != "professionnel" %}
                     {% if person != event.person %}
                         {% if is_registered %}
