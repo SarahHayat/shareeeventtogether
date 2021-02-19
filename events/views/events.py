@@ -24,13 +24,18 @@ class EventDetailsView(View):
             query = self.request.GET.get('q')
             person = get_person_by_user(user)
             category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
+            lieu_filter = request.GET.get('lieu')
             if query is not None:
                 events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(event_date__gte=timezone.now())
-                filtered_events = get_filtered_events(events_search, category_filter)
+                filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)
                 category = get_events_categories(events_search)
+            elif lieu_filter is not None:
+                events = Event.objects.filter(city=lieu_filter, event_date__gte=timezone.now())
+                filtered_events = get_filtered_events(events, category_filter, lieu_filter)
+                category = get_events_categories(events)
             else:
                 events = get_all_events()
-                filtered_events = get_filtered_events(events, category_filter)
+                filtered_events = get_filtered_events(events, category_filter, lieu_filter)
                 category = get_events_categories(events)
             order_filter = request.GET.get('order_filter', 'event_date')
             if order_filter == 'event_date':
@@ -42,6 +47,7 @@ class EventDetailsView(View):
                 'person': person,
                 'filtered_events': filtered_events,
                 'category': category,
+                'lieu_filter': lieu_filter,
                 'order_filter': order_filter,
                 'category_filter': category_filter,
                 'query': query,
@@ -77,10 +83,12 @@ class EventCreateView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         form = EventForm(request.POST)
+        print(form.errors)
         if form.is_valid():
             event = form.save(commit=False)
             event.person = person
             event.created_at = datetime.now()
+
             event.save()
             return redirect(reverse('events'))
         else:

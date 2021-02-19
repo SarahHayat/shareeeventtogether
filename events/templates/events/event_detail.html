@@ -1,8 +1,16 @@
 {% extends 'persons/base_navbar.html' %}
+{% load leaflet_tags %}
 
 {% block content %}
+
+
     <div class="row">
-        <a class="text-primary" href="{% url 'events' %}"><i class="fa fa-arrow-left"></i> retour</a>
+        <div class="col">
+            <a class="text-primary" href="{% url 'events' %}"><i class="fa fa-arrow-left"></i> retour</a>
+        </div>
+    </div>
+
+    <div class="row">
         {% if event %}
             <div class="col p-0 mt-3 text-center">
                 <h1>{{ event.title|title }} <span
@@ -16,6 +24,7 @@
                 <hr>
                 <h4>Lieu :</h4>
                 <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                {% leaflet_map "map" callback="window.map_init_basic" %}
                 {% if user.pk and person.person_type != "professionnel" %}
                     {% if person != event.person %}
                         {% if is_registered %}
@@ -28,5 +37,19 @@
             </div>
         {% endif %}
     </div>
+    <script>
+        var c_x = {{ event.coordonate_x }};
+        var c_y = {{ event.coordonate_y }};
+        var lat_long = [c_x, c_y]
+
+
+        function map_init_basic(map, options) {
+            var marker = L.marker([c_x, c_y]).addTo(map);
+            var popup = L.popup().setLatLng([c_x, c_y]).setContent("<h4>{{ event.title }}</h4>" + "<a target='_blank' href='https://www.google.com/maps/dir//+{{ event.city }}+{{ event.zip_code }}+{{ event.address }}'>On y va !</a>");
+            marker.bindPopup(popup);
+            map.setView(lat_long, 15);
+
+        }
+    </script>
 
 {% endblock %}
