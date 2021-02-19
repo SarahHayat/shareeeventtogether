@@ -17,6 +17,7 @@ def get_all_events():
 def get_events_by_user(user):
     return Event.objects.filter(person__user=user)
 
+
 def get_person_by_id(person_id):
     return Person.objects.get(pk=person_id)
 
@@ -29,9 +30,11 @@ def get_if_person_is_registered(person, event):
     return InscriptionEvent.objects.filter(person=person, event=event).exists()
 
 
-def get_filtered_events(events, category_filter=ALL_CATEGORIES):
+def get_filtered_events(events, category_filter=ALL_CATEGORIES, lieu_filter=None):
     if category_filter != ALL_CATEGORIES:
         events = events.filter(category=category_filter)
+    if lieu_filter is not None:
+        events = events.filter(city=lieu_filter)
     return events
 
 
