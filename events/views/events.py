@@ -25,6 +25,7 @@ class EventDetailsView(View):
             person = get_person_by_user(user)
             category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
             lieu_filter = request.GET.get('lieu')
+
             if query is not None:
                 events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(event_date__gte=timezone.now())
                 filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)

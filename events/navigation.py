@@ -1,5 +1,4 @@
-from django.urls import  reverse
-
+from django.urls import reverse
 
 NAV_EVENEMENT = 'Evenement'
 NAV_PROFIL = 'Profil'
@@ -24,4 +23,6 @@ def navigation_items(selected_item=None):
             'url': reverse(shortcut),
             'active': True if selected_item == name else False,
         })
+
+
     return items

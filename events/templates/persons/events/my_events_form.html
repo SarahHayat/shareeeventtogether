@@ -2,18 +2,32 @@
 {% load bootstrap4 %}
 
 {% block content %}
-    <form id="picker" method="post">
-        {% csrf_token %}
-        <div>
-            {% bootstrap_field form.title required_css_class='required'%}
-            {% bootstrap_field form.description required_css_class='required'%}
-            {% bootstrap_field form.address required_css_class='required'%}
-            {% bootstrap_field form.zip_code required_css_class='required'%}
-            {% bootstrap_field form.city required_css_class='required'%}
-            {% bootstrap_field form.category required_css_class='required'%}
-            {% bootstrap_field form.event_date required_css_class='required'%}
+    <div class="row my-5">
+        <div class="col-8 m-auto">
+            <form id="picker" method="post" >
+                {% csrf_token %}
+                {% bootstrap_field form.title required_css_class='required' %}
+                {% bootstrap_field form.description required_css_class='required' %}
+                {% bootstrap_field form.address required_css_class='required' %}
+                <div class="form-row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.zip_code required_css_class='required' %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.city required_css_class='required' %}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        {% bootstrap_field form.category required_css_class='required' %}
+                    </div>
+                    <div class="col-md-6">
+                        {% bootstrap_field form.event_date required_css_class='required' %}
+                    </div>
+                </div>
+                <a class="text-danger mr-2" href="{% url 'profil-events' %}">Annuler</a>
+                <button class="btn btn-primary text-right" type="submit">Ajouter</button>
+            </form>
         </div>
-        <a class="text-danger mr-2" href="{% url 'profil-events' %}">Annuler</a>
-        <button type="submit">Ajouter</button>
-    </form>
+    </div>
 {% endblock %}
