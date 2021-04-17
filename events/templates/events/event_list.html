@@ -23,6 +23,9 @@
                     <form action="{% url 'events' %}" class="form-inline mb-2" method="get">
                         <div class="row">
                             <input name="lieu" class="form-control col-7 ml-3" type="search" placeholder="Cergy">
+                            {% if lieu_filter %}
+                                <a href="{% url 'events' %}"><span>&times</span></a>
+                            {% endif %}
                         </div>
                         <div class="row">
                             <div class="col-7">
@@ -123,14 +126,17 @@
                 map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
             {% endfor %}
             // marker for person position
-            var circle = L.circle(["{{ coordonate_x }}", "{{ coordonate_y }}"], {
-                color: 'red',
-                fillColor: '#f03',
-                fillOpacity: 0.5,
-                radius: 500
-            }).addTo(map);
-            circle.bindPopup("I am here").openPopup();
 
+                var circle = L.circle(["{{ coordonate_x }}", "{{ coordonate_y }}"], {
+                    color: 'red',
+                    fillColor: '#f03',
+                    fillOpacity: 0.5,
+                    radius: 500
+                }).addTo(map);
+                map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
+                {% if not lieu_filter %}
+                    circle.bindPopup("I am here").openPopup();
+                {% endif %}
             for (let i = 0; i < markers.length; i++) {
                 markers[i].addTo(map)
             }

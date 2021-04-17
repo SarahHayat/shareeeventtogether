@@ -30,6 +30,11 @@ class EventDetailsView(View):
             category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
             lieu_filter = request.GET.get('lieu')
 
+            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1")
+            reponse = api_request.json()
+            coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
+            coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
+
             if query is not None:
                 events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(
                     event_date__gte=timezone.now())
@@ -39,6 +44,10 @@ class EventDetailsView(View):
                 events = Event.objects.filter(city=lieu_filter, event_date__gte=timezone.now())
                 filtered_events = get_filtered_events(events, category_filter, lieu_filter)
                 category = get_events_categories(events)
+                api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter}&autocomplete=0&limit=1")
+                reponse = api_request.json()
+                coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
+                coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
             else:
                 events = get_all_events()
                 filtered_events = get_filtered_events(events, category_filter, lieu_filter)
@@ -48,11 +57,6 @@ class EventDetailsView(View):
                 filtered_events = filtered_events.order_by('event_date')
             else:
                 filtered_events = filtered_events.order_by('-event_date')
-
-            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1")
-            reponse = api_request.json()
-            coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
-            coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
 
             context = {
                 'user': user,
