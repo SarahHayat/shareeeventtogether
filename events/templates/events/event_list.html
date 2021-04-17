@@ -117,12 +117,20 @@
 
         function event_callback(map) {
             {% for event in filtered_events %}
-
                 markers.push(marker = L.marker(["{{ event.coordonate_x }}", "{{ event.coordonate_y }}"]))
-                var popup = L.popup().setLatLng(["{{ event.coordonate_x }}", "{{ event.coordonate_y }}"]).setContent("<a href='{% url "description-event" event.pk %}'><h4>{{ event.title }}</h4></a>");
+                var popup = L.popup().setLatLng(["{{ event.coordonate_x }}", "{{ event.coordonate_y }}"]).setContent("<a href='{% url "description-event" event.pk %}'><h5>{{ event.title }}</h5></a>");
                 marker.bindPopup(popup);
                 map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
             {% endfor %}
+            // marker for person position
+            var circle = L.circle(["{{ coordonate_x }}", "{{ coordonate_y }}"], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(map);
+            circle.bindPopup("I am here").openPopup();
+
             for (let i = 0; i < markers.length; i++) {
                 markers[i].addTo(map)
             }
