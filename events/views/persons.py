@@ -51,7 +51,10 @@ class InscriptionView(View):
             person.save()
             return redirect(reverse('events'))
         else:
-            return redirect(reverse('login'))
+            context = {
+                'form': form
+            }
+            return render(request, 'persons/registration/incription.html', context)
 
 
 class DetailProfilView(PersonView):
