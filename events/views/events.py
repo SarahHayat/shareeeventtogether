@@ -1,3 +1,5 @@
+import requests
+from django.core import serializers
 from django.db.models import Avg
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -6,6 +8,8 @@ from django.utils import timezone
 from django.utils.datetime_safe import datetime
 from django.views import View
 from django.db.models import Q
+
+import json
 
 from events.forms import EventForm, KarmaForm
 from events.models import InscriptionEvent, Event, Karma
@@ -27,7 +31,8 @@ class EventDetailsView(View):
             lieu_filter = request.GET.get('lieu')
 
             if query is not None:
-                events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(event_date__gte=timezone.now())
+                events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(
+                    event_date__gte=timezone.now())
                 filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)
                 category = get_events_categories(events_search)
             elif lieu_filter is not None:
@@ -43,6 +48,12 @@ class EventDetailsView(View):
                 filtered_events = filtered_events.order_by('event_date')
             else:
                 filtered_events = filtered_events.order_by('-event_date')
+
+            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1")
+            reponse = api_request.json()
+            coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
+            coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
+
             context = {
                 'user': user,
                 'person': person,
@@ -53,7 +64,8 @@ class EventDetailsView(View):
                 'category_filter': category_filter,
                 'query': query,
                 'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
-
+                'coordonate_x': str(coordonate_x).replace(",", "."),
+                'coordonate_y': str(coordonate_y).replace(",", ".")
             }
         else:
             events = get_all_events()

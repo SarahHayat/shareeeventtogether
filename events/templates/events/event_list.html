@@ -1,5 +1,6 @@
 {% extends 'persons/base_navbar.html' %}
 {% load static %}
+{% load leaflet_tags %}
 
 {% block content %}
     <div class="row">
@@ -15,6 +16,7 @@
                 </div>
 
             </div>
+            {% leaflet_map "map" callback="event_callback" %}
             <div class="row mt-3">
                 <div class="col-md-2 d-md-block">
                     <b>Lieux</b>
@@ -23,7 +25,7 @@
                             <input name="lieu" class="form-control col-7 ml-3" type="search" placeholder="Cergy">
                         </div>
                         <div class="row">
-                            <div  class="col-7">
+                            <div class="col-7">
                                 <button class="btn btn-outline-primary" type="submit">Recherche</button>
                             </div>
                         </div>
@@ -38,7 +40,6 @@
                                     <a class="badge badge-pill badge-light"
                                        href="{% url 'events' %}?category_filter={{ value }}&order_filter=
                                                {{ order_filter }}{% if query is not None %}&q=
-
 
 
 
@@ -110,5 +111,23 @@
             </div>
         </div>
     </div>
+    <script>
+        var markers = [];
+        var marker;
+
+        function event_callback(map) {
+            {% for event in filtered_events %}
+
+                markers.push(marker = L.marker(["{{ event.coordonate_x }}", "{{ event.coordonate_y }}"]))
+                var popup = L.popup().setLatLng(["{{ event.coordonate_x }}", "{{ event.coordonate_y }}"]).setContent("<a href='{% url "description-event" event.pk %}'><h4>{{ event.title }}</h4></a>");
+                marker.bindPopup(popup);
+                map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
+            {% endfor %}
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].addTo(map)
+            }
+
+        }
+    </script>
 
 {% endblock %}
