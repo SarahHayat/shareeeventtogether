@@ -37,19 +37,14 @@ class InscriptionView(View):
 
     def post(self, request):
         form = PersonForm(request.POST)
-        print('Before')
-        print(form.errors)
-
         if form.is_valid():
-            print('after')
-            print(form)
             person = form.save(commit=False)
             user = User.objects.create_user(form.cleaned_data['email'], form.cleaned_data['password'])
             user.save()
             person.user = user
             person.created_at = datetime.now()
             person.save()
-            return redirect(reverse('events'))
+            return redirect(reverse('login'))
         else:
             context = {
                 'form': form

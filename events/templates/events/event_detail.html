@@ -13,8 +13,15 @@
     <div class="row">
         {% if event %}
             <div class="col p-0 mt-3 text-center">
-                <h1>{{ event.title|title }} <span
+            <div class="col d-flex align-items-center justify-content-center">
+                <h1 class="mr-3">{{ event.title|title }} <span
                         class="badge badge-pill badge-primary">{{ event.category|title }}</span></h1>
+                {% if is_favorite %}
+                    <a href="{% url 'unfavorite-event' favorite.pk %}"><i class="fas fa-heart text-danger fa-2x"></i></a>
+                {% else %}
+                    <a href="{% url 'favorite-event' event.pk %}"><i class="far fa-heart text-danger fa-2x"></i></a>
+                {% endif %}
+            </div>
                 <p>Par {% if event.person.pk is not person.pk %}
                     <a href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
                     {{ event.person.pseudo }} {% endif %} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
@@ -28,10 +35,12 @@
                 {% if user.pk and person.person_type != "professionnel" %}
                     {% if person != event.person %}
                         {% if is_registered %}
-                            <p>Rendez-vous sur votre profil pour vous désinscrire</p>
+                            <a href="{% url 'desinscription-event' inscrit.pk %}" class="btn btn-primary">se
+                                désinscrire</a>
                         {% else %}
                             <a href="{% url 'inscription-event' event.pk %}" class="btn btn-primary">s'inscrire</a>
                         {% endif %}
+
                     {% endif %}
                 {% endif %}
             </div>

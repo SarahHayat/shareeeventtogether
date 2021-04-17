@@ -68,3 +68,11 @@ class Karma(models.Model):
 
     def __str__(self):
         return f'{self.person}-{self.event}-{self.note}'
+
+
+class FavoriteEvent(models.Model):
+    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
+    event = models.ForeignKey('Event', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.person.pseudo} a mit en fav {self.event.title}'

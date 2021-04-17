@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from events.models import Event, InscriptionEvent, Karma
+from events.models import Event, InscriptionEvent, Karma, FavoriteEvent
 
 from persons.models import Person
 
@@ -22,4 +22,9 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(InscriptionEvent)
 class InscriptionEventAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(FavoriteEvent)
+class FavoriteEventAdmin(admin.ModelAdmin):
     pass
