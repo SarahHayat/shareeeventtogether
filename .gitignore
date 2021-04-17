@@ -152,3 +152,4 @@ fabric.properties
 
 
 .DS_Store
+db.sqlite3
