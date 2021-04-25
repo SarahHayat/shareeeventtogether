@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 from events.views.events import ProfileEventDetailsView, DeleteEventView, EditEventView, ProfileRegisteredEventsView, \
     DesinscriptionEventView, ProfileFinishedEventsView, EventDetailsView, EventCreateView, EventInscriptionView, \
-    EventDescriptionView, ProfileRatingFinishedEventsView
+    EventDescriptionView, ProfileRatingFinishedEventsView, EventFavoriteView, UnfavoriteEventView, ProfileFavoriteEventsView
 from events.views.persons import InscriptionView, EditProfilView, DetailProfilView, HomeView, ProfilShowUserView, \
     ProfilShowEventView
 
@@ -18,11 +18,14 @@ urlpatterns = [
     path('evenements/creer', EventCreateView.as_view(), name='create-event'),
     path('evenement/description/<int:event_id>', EventDescriptionView.as_view(), name='description-event'),
     path('evenement/inscription/<int:event_id>', EventInscriptionView.as_view(), name='inscription-event'),
+    path('evenement/favoris/<int:event_id>', EventFavoriteView.as_view(), name='favorite-event'),
+    path('evenement/favoris/desinscription/<int:favorite_id>', UnfavoriteEventView.as_view(), name='unfavorite-event'),
     path('profil', DetailProfilView.as_view(), name='profil'),
     path('profil/modifier', EditProfilView.as_view(), name='profil-edit'),
     path('profil/evenements', ProfileEventDetailsView.as_view(), name='profil-events'),
     path('profil/evenements/inscrit', ProfileRegisteredEventsView.as_view(), name='profil-registered_events'),
     path('profil/evenements/finis', ProfileFinishedEventsView.as_view(), name='profil-finished-events'),
+    path('profil/evenements/favoris', ProfileFavoriteEventsView.as_view(), name='profil-favorite-events'),
     path('profil/evenements/<int:event_id>', ProfileRatingFinishedEventsView.as_view(), name='profil-rating-finished-events'),
     path('profil/evenements/<int:inscription_id>/inscris/supprimer', DesinscriptionEventView.as_view(), name='desinscription-event'),
     path('profil/evenements/<int:event_id>/modifier', EditEventView.as_view(), name='edit-event'),

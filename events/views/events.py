@@ -12,10 +12,11 @@ from django.db.models import Q
 import json
 
 from events.forms import EventForm, KarmaForm
-from events.models import InscriptionEvent, Event, Karma
+from events.models import InscriptionEvent, Event, Karma, FavoriteEvent
 from events.models_helpers import get_person_by_user, get_all_events, get_events_by_user, get_event_by_id, \
     get_if_person_is_registered, get_inscription_event_person, get_inscription_by_id, ALL_CATEGORIES, \
-    get_filtered_events, get_events_categories, get_person_by_id
+    get_filtered_events, get_events_categories, get_person_by_id, get_if_event_is_fav, get_favorite_by_id, \
+    get_favorite_event_person
 
 from events import navigation
 from events.views.persons import PersonView
@@ -197,7 +198,7 @@ class DesinscriptionEventView(PersonView):
     def get(self, request, inscription_id):
         inscription = get_inscription_by_id(inscription_id)
         inscription.delete()
-        return redirect(reverse('profil-registered_events'))
+        return redirect(reverse('description-event', kwargs={'event_id': inscription.event.pk}))
 
 
 class DeleteEventView(PersonView):
@@ -249,21 +250,65 @@ class EventDescriptionView(PersonView):
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
         is_registered = get_if_person_is_registered(person, event)
+        is_favorite = get_if_event_is_fav(person, event)
+        favorite = None
+        inscrit = None
+        if is_favorite:
+            favorite = FavoriteEvent.objects.get(person=person, event=event)
+        if is_registered:
+            inscrit = InscriptionEvent.objects.get(person=person, event=event)
         context = {
             'user': user,
             'person': person,
             'event': event,
             'is_registered': is_registered,
+            'is_favorite': is_favorite,
+            'favorite': favorite,
+            'inscrit': inscrit,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'events/event_detail.html', context)
 
 
 class EventInscriptionView(PersonView):
-    def get(self, request, event_id, **kwargs):
+    def get(self, request, event_id, *args, **kwargs):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
         inscription = InscriptionEvent(person=person, event=event)
         inscription.save()
         return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
+
+
+
+class EventFavoriteView(PersonView):
+    def get(self, request, event_id, *args, **kwargs):
+        user = request.user
+        person = get_person_by_user(user)
+        event = get_event_by_id(event_id)
+        favorite = FavoriteEvent(person=person, event=event)
+        favorite.save()
+        return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
+
+
+class UnfavoriteEventView(PersonView):
+    def get(self, request, favorite_id):
+        favorite = get_favorite_by_id(favorite_id)
+        favorite.delete()
+        return redirect(reverse('description-event', kwargs={'event_id': favorite.event.pk}))
+
+
+class ProfileFavoriteEventsView(PersonView):
+    def get(self, request):
+        user = request.user
+        person = get_person_by_user(user)
+        today = datetime.now()
+        favorite_events = get_favorite_event_person(person).filter(event__event_date__gt=today)
+        context = {
+            'user': user,
+            'person': person,
+            'favorite_events': favorite_events,
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+
+        }
+        return render(request, 'persons/events/my_favorite_events.html', context)

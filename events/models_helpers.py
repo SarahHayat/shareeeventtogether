@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from events.models import Event, InscriptionEvent
+from events.models import Event, InscriptionEvent, FavoriteEvent
 from persons.models import Person
 
 ALL_CATEGORIES = 'all'
@@ -53,3 +53,13 @@ def get_inscription_event_person(person):
 
 def get_inscription_by_id(inscription_id):
     return InscriptionEvent.objects.get(pk=inscription_id)
+
+
+def get_if_event_is_fav(person, event):
+    return FavoriteEvent.objects.filter(person=person, event=event).exists()
+
+def get_favorite_by_id(favorite_id):
+    return FavoriteEvent.objects.get(pk=favorite_id)
+
+def get_favorite_event_person(person):
+    return FavoriteEvent.objects.filter(person=person)
