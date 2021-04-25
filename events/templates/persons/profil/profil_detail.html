@@ -6,10 +6,10 @@
 {% block content %}
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil' %}">Profil</a>
+            <a class="nav-link" href="{% url 'profil' %}">Mon profil</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-events' %}">Events</a>
+            <a class="nav-link" href="{% url 'profil-events' %}">Mes évenements</a>
         </li>
         {% if person.person_type != "professionnel" %}
             <li class="nav-item">
@@ -121,4 +121,5 @@
         </div>
     </div>
 {% endblock content %}
+
 

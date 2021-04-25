@@ -20,11 +20,10 @@
             {% for event in events %}
                 <div class="row ">
                     <div class="col">
-                        <h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3>
+                        <a href="{% url 'description-event' event.pk %}"><h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3></a>
                         <p>{{ event.event_date|date:'d/m - h:m' }}</p>
                         <p>{{ event.description }}</p>
                         <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
-                        <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Voir les details</a>
                     </div>
                 </div>
             {% empty %}

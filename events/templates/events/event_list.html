@@ -22,7 +22,7 @@
                     <b>Lieux</b>
                     <form action="{% url 'events' %}" class="form-inline mb-2" method="get">
                         <div class="row">
-                            <input name="lieu" class="form-control col-7 ml-3" type="search" placeholder="Cergy">
+                            <input name="lieu" class="form-control col-7 ml-3" type="search" placeholder="ex: Cergy">
                             {% if lieu_filter %}
                                 <a href="{% url 'events' %}"><span>&times</span></a>
                             {% endif %}

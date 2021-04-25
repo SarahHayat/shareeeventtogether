@@ -5,3 +5,10 @@
 {% block content %}
 {% include 'persons/profil/profil_form.html' %}
 {% endblock content %}
+{% block extra_js %}
+    <script>
+    $("#upload-button").on("click", function (event) {
+        $("#fileupload").click()
+    })
+    </script>
+{% endblock %}

@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col">
-            <a class="text-primary" href="{% url 'events' %}"><i class="fa fa-arrow-left"></i> retour</a>
+            <a class="text-primary" href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'events' %}{% endif %}"><i class="fa fa-arrow-left"></i> retour</a>
         </div>
     </div>
 
