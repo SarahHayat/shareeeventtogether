@@ -73,17 +73,18 @@ class EditProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
         }
         return render(request, 'persons/profil/profil_edit.html', context)
 
     def post(self, request):
         user = request.user
         person = Person.objects.get(user=user)
-        form = ProfilForm(instance=person, data=request.POST)
+        form = ProfilForm(person, request.POST, request.FILES)
         if form.is_valid():
             person.user.email = form.cleaned_data['email']
             person.user.save()
+
             person.save()
             return redirect(reverse('profil'))
         else:
@@ -91,7 +92,7 @@ class EditProfilView(PersonView):
             context = {
                 'person': person,
                 'form': form,
-                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+                'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
 
             }
             return render(request, 'persons/profil/profil_edit.html', context)
