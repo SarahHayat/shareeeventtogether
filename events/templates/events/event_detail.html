@@ -2,47 +2,50 @@
 {% load leaflet_tags %}
 
 {% block content %}
-
-
-    <div class="row">
-        <div class="col">
-            <a class="text-primary" href="{% if request.META.HTTP_REFERER %}{{ request.META.HTTP_REFERER }}{% else %}{% url 'events' %}{% endif %}"><i class="fa fa-arrow-left"></i> retour</a>
-        </div>
-    </div>
-
-    <div class="row">
+    <div class="row my-3">
         {% if event %}
-            <div class="col p-0 mt-3 text-center">
-            <div class="col d-flex align-items-center justify-content-center">
-                <h1 class="mr-3">{{ event.title|title }} <span
-                        class="badge badge-pill badge-primary">{{ event.category|title }}</span></h1>
-                {% if is_favorite %}
-                    <a href="{% url 'unfavorite-event' favorite.pk %}"><i class="fas fa-heart text-danger fa-2x"></i></a>
-                {% else %}
-                    <a href="{% url 'favorite-event' event.pk %}"><i class="far fa-heart text-danger fa-2x"></i></a>
-                {% endif %}
-            </div>
-                <p>Par {% if event.person.pk is not person.pk %}
-                    <a href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
-                    {{ event.person.pseudo }} {% endif %} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
-                <hr>
-                <h4>Description :</h4>
-                <p>{{ event.description }}</p>
-                <hr>
-                <h4>Lieu :</h4>
-                <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
-                {% leaflet_map "map" callback="window.map_init_basic" %}
-                {% if user.pk and person.person_type != "professionnel" %}
-                    {% if person != event.person %}
-                        {% if is_registered %}
-                            <a href="{% url 'desinscription-event' inscrit.pk %}" class="btn btn-primary">se
-                                désinscrire</a>
-                        {% else %}
-                            <a href="{% url 'inscription-event' event.pk %}" class="btn btn-primary">s'inscrire</a>
-                        {% endif %}
-
+            <div class="col-9 text-left m-auto">
+                <div class="row">
+                <div class="col-12 d-flex text-center align-items-center justify-content-center">
+                    <h1 class="mr-3">{{ event.title|title }}</h1>
+                     {% if is_favorite %}
+                        <a href="{% url 'unfavorite-event' favorite.pk %}"><i
+                                class="fas fa-heart text-danger fa-2x"></i></a>
+                    {% else %}
+                        <a href="{% url 'favorite-event' event.pk %}"><i class="far fa-heart text-danger fa-2x"></i></a>
                     {% endif %}
-                {% endif %}
+                </div>
+                <div class="col-12 text-center">
+                    <p>Par {% if event.person.pk is not person.pk %} <a class="show-user" href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
+                    {{ event.person.pseudo }} {% endif %} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                </div>
+
+                </div>
+                <hr>
+                <div>
+                    <h4><b>Informations</b></h4>
+                    <p><b>Catégorie :</b> {{ event.category|title }}</p>
+                    <p><b>Description :</b> {{ event.description }}</p>
+                </div>
+                <hr>
+                <div>
+                    <h4><b>Lieu</b></h4>
+                    <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                    {% leaflet_map "map" callback="window.map_init_basic" %}
+                </div>
+                <div class="text-center mt-3">
+                    {% if user.pk and person.person_type != "professionnel" %}
+                        {% if person != event.person %}
+                            {% if is_registered %}
+                                <a href="{% url 'desinscription-event' inscrit.pk %}" class="btn btn-primary">se
+                                    désinscrire</a>
+                            {% else %}
+                                <a href="{% url 'inscription-event' event.pk %}" class="btn btn-primary">s'inscrire</a>
+                            {% endif %}
+
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
         {% endif %}
     </div>
@@ -54,7 +57,7 @@
 
         function map_init_basic(map, options) {
             var marker = L.marker([c_x, c_y]).addTo(map);
-            var popup = L.popup().setLatLng([c_x, c_y]).setContent("<h4>{{ event.title }}</h4>" + "<a target='_blank' href='https://www.google.com/maps/dir//+{{ event.city }}+{{ event.zip_code }}+{{ event.address }}'>On y va !</a>");
+            var popup = L.popup().setLatLng([c_x, c_y]).setContent("<h4>{{ event.title|title }}</h4>" + "<a target='_blank' href='https://www.google.com/maps/dir//+{{ event.city }}+{{ event.zip_code }}+{{ event.address }}'>On y va !</a>");
             marker.bindPopup(popup);
             map.setView(lat_long, 15);
 

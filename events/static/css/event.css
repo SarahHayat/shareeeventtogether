@@ -1,0 +1,34 @@
+body{
+    background-color: whitesmoke!important;
+}
+.back-nav{
+    background-color: #478680 !important;
+}
+
+.search{
+    background-color: #F0DF94 !important;
+    color: #478680 !important;
+    border: none !important;
+}
+.search:hover{
+    color: #ED773C!important;
+    border: none !important;
+}
+
+.btn-primary, .btn-outline-primary{
+    background-color: #70B7AE!important;
+    border: none !important;
+}
+
+.badge-primary{
+    background-color: #ED773C!important;
+    color: white!important;
+}
+
+.profil-tab .nav-link{
+    color: #70B7AE!important;
+}
+
+h4 a, .show-user {
+    color: #ED773C!important;
+}

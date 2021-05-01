@@ -130,7 +130,6 @@ class ProfileEventDetailsView(PersonView):
             'events': events,
             'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_events_details.html', context)
 
@@ -146,7 +145,6 @@ class ProfileRegisteredEventsView(PersonView):
             'person': person,
             'inscription_events': inscription_events,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_registered_events.html', context)
 
@@ -165,7 +163,6 @@ class ProfileFinishedEventsView(PersonView):
             'form': form,
             'inscription_events': inscription_events,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_finished_events.html', context)
 
@@ -213,7 +210,6 @@ class EditEventView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
-        print(event.event_date)
         form = EventForm(instance=event)
         context = {
             'person': person,
