@@ -76,3 +76,22 @@ class FavoriteEvent(models.Model):
 
     def __str__(self):
         return f'{self.person.pseudo} a mit en fav {self.event.title}'
+
+
+class Topic(models.Model):
+    name = models.CharField('Nom', max_length=150)
+    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
+    created_at = models.DateTimeField('créé à', auto_now=True)
+    description = models.TextField('descrption')
+
+    def __str__(self):
+        return f'{self.name} - {self.person}'
+
+
+class Comment(models.Model):
+    topic = models.ForeignKey('Topic', on_delete=models.CASCADE)
+    person = models.ForeignKey('persons.Person', on_delete=models.CASCADE)
+    posted_at = models.DateTimeField('posté à', auto_now=True)
+
+    def __str__(self):
+        return f'{self.topic} commented by {self.person}'
