@@ -1,4 +1,6 @@
 {% extends 'persons/base_navbar.html' %}
+{% load bootstrap4 %}
+{% load static %}
 
 {% block content %}
     <div class="row">
@@ -14,10 +16,10 @@
                         </li>
                         {% if person.person_type != "professionnel" %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
+                                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes favorites</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions
+                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes favorites
                                     passées</a>
                             </li>
                             <li class="nav-item">
@@ -34,25 +36,55 @@
                         <div class="col-md-5 text-right">
                         </div>
                     </div>
-                    {% for favorite in favorite_events %}
-                        <div class="row">
-                            <div class="col">
-                                <a href="{% url 'description-event' favorite.event.pk %}"><h3 class="mt-3">{{ favorite.event.title }}</h3></a>
-                                <span>({{ favorite.event.category }})</span>
-                                <p>Par {% if favorite.event.person.pk is not person.pk %}
-                                    <a class="show-user" href="{% url 'profil-show-user' favorite.event.person.pk %}">{{ favorite.event.person.pseudo }}</a> {% else %}
-                                    {{ favorite.event.person.pseudo }} {% endif %}
-                                    le {{ favorite.event.event_date|date:'d/m/y à h:m' }}
-                                </p>
-                                <p>{{ favorite.event.description }}</p>
-                                <p>{{ favorite.event.address }}, {{ favorite.event.zip_code }}, {{ favorite.event.city }}</p>
-                                <a href="{% url 'unfavorite-event' favorite.pk %}"><i
-                                        class="fas fa-heart text-danger fa-2x"></i></a>
+                    <div class="row d-flex">
+                        {% for favorite in favorite_events %}
+                            <div class="col-md-4">
+                                <div class="card mt-3">
+                                    <div>
+                                        {% with 'assets/category/'|add:favorite.event.category|add:'.jpeg' as category %}
+                                            <img src="{% static category %}" class="card-img category-img">
+                                            <a class="favorite" href="{% url 'unfavorite-event' favorite.pk %}"><i
+                                                    class="fas fa-heart text-danger fa-2x"></i></a>
+                                        {% endwith %}
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <p class="text-left"><a
+                                                    href="{% url 'description-event' favorite.event.pk %}"><h4
+                                                    class="mt-3">{{ favorite.event.title|title }}</h4></a></p>
+                                        </div>
+                                        <p>Par {% if favorite.event.person.pk is not person.pk %}
+                                            <a class="show-user"
+                                               href="{% url 'profil-show-user' favorite.event.person.pk %}">{{ favorite.event.person.pseudo }}</a> {% else %}
+                                            {{ favorite.event.person.pseudo }} {% endif %}
+                                        </p>
+                                        <p class="card-text"><b>Catégorie :</b> {{ favorite.event.category|title }}</p>
+                                        <p class="card-text"><b>Lieu :</b> {{ favorite.event.address }}, {{ favorite.event.zip_code }}, {{ favorite.event.city }}</p>
+                                        <p class="card-text"><b>Date :</b> {{ favorite.event.event_date|date:'d/m/y à h:m' }} </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    {% empty %}
-                        <p>Il n'y a pas d'évenements favoris pour le moment</p>
-                    {% endfor %}
+
+                            {##}
+                            {#                        <div class="row">#}
+                            {#                            <div class="col">#}
+                            {#                                <a href="{% url 'description-event' favorite.event.pk %}"><h3 class="mt-3">{{ favorite.event.title }}</h3></a>#}
+                            {#                                <span>({{ favorite.event.category }})</span>#}
+                            {#                                <p>Par {% if favorite.event.person.pk is not person.pk %}#}
+                            {#                                    <a class="show-user" href="{% url 'profil-show-user' favorite.event.person.pk %}">{{ favorite.event.person.pseudo }}</a> {% else %}#}
+                            {#                                    {{ favorite.event.person.pseudo }} {% endif %}#}
+                            {#                                    le {{ favorite.event.event_date|date:'d/m/y à h:m' }}#}
+                            {#                                </p>#}
+                            {#                                <p>{{ favorite.event.description }}</p>#}
+                            {#                                <p>{{ favorite.event.address }}, {{ favorite.event.zip_code }}, {{ favorite.event.city }}</p>#}
+                            {#                                <a href="{% url 'unfavorite-event' favorite.pk %}"><i#}
+                            {#                                        class="fas fa-heart text-danger fa-2x"></i></a>#}
+                            {#                            </div>#}
+                            {#                        </div>#}
+                        {% empty %}
+                            <p>Il n'y a pas d'évenements favoris pour le moment</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

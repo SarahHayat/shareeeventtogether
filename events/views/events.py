@@ -77,7 +77,7 @@ class EventDetailsView(View):
             user = request.user
             context = {
                 'user': user,
-                'events': events,
+                'filtered_events': events,
                 'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
 
             }

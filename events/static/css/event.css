@@ -1,34 +1,65 @@
-body{
-    background-color: whitesmoke!important;
+body {
+    background-color: whitesmoke !important;
 }
-.back-nav{
+
+.back-nav {
     background-color: #478680 !important;
 }
 
-.search{
+.search {
     background-color: #F0DF94 !important;
     color: #478680 !important;
     border: none !important;
 }
-.search:hover{
-    color: #ED773C!important;
+
+.search:hover {
+    color: #ED773C !important;
     border: none !important;
 }
 
-.btn-primary, .btn-outline-primary{
-    background-color: #70B7AE!important;
+.btn-primary, .btn-outline-primary {
+    background-color: #70B7AE !important;
     border: none !important;
 }
 
-.badge-primary{
-    background-color: #ED773C!important;
-    color: white!important;
+.badge-primary {
+    background-color: #7ebcb5 !important;
+    color: white !important;
 }
 
-.profil-tab .nav-link{
-    color: #70B7AE!important;
+.profil-tab .nav-link {
+    color: #70B7AE !important;
 }
 
 h4 a, .show-user {
-    color: #ED773C!important;
+    color: #7ebcb5 !important;
+}
+
+.category-img {
+    height: 280px;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.favorite, .note {
+    position: absolute;
+    right: 5%;
+    top: 5%
+}
+
+.note i{
+    color: yellow;
+}
+
+.note a{
+    cursor: pointer;
+}
+
+.card-body {
+    height: 250px;
+}
+
+.action-card {
+    position: absolute;
+    bottom: 2%;
 }

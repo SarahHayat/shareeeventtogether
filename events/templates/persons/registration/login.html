@@ -1,11 +1,15 @@
 {% extends 'persons/base_navbar.html' %}
 {% load bootstrap4 %}
+{% load static %}
 
 {% block title %}Connexion{% endblock %}
 
 {% block content %}
     <div class="login row justify-content-center mt-4">
         <div class="col col-sm-6 col-md-4">
+            <div class="text-center mb-2">
+                <img src="{% static 'assets/logo1.png' %}" height="200">
+            </div>
             <p class="text-muted">Veuillez vous connecter</p>
             <form method="post" class="form">
                 {% csrf_token %}
