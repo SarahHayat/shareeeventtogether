@@ -41,7 +41,11 @@
                                     <span class="badge badge-pill badge-primary">{{ label }} ({{ count }})</span>
                                 {% else %}
                                     <a class="badge badge-pill badge-light"
-                                       href="{% url 'events' %}?category_filter={{ value }}&order_filter= {{ order_filter }}{% if query is not None %}&q={{ query }}{% elif lieu_filter is not None %}&lieu={{ lieu_filter }}{% endif %}">{{ label|title }} ({{ count }})</a>
+                                       href="{% url 'events' %}?category_filter={{ value }}&order_filter=
+                                               {{ order_filter }}{% if query is not None %}&q=
+
+                                           {{ query }}{% elif lieu_filter is not None %}&lieu={{ lieu_filter }}{% endif %}">{{ label|title }}
+                                        ({{ count }})</a>
                                 {% endif %}
                             </li>
                         {% endfor %}
@@ -73,27 +77,28 @@
                                     {% endif %}
                                 </div>
                                 <div class="card-body">
-                                <div class="d-flex">
-                                    <h5 class="card-title">Par {% if event.person.pk is not person.pk %}
-                                        <a class="show-user" href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a>{% else %}{{ event.person.pseudo }} {% endif %}
-                                        {% if event.person.note is not None %}
-                                        {% if event.person.note >= 7 %}
-                                            <img height="25" width="25" src="{% static 'assets/good.svg' %}">
-                                        {% elif event.person.note < 7 and event.person.note >= 4 %}
-                                            <img height="25" width="25" src="{% static 'assets/average.svg' %}">
-                                        {% else %}
-                                            <img height="25" width="25" src="{% static 'assets/bad.svg' %}">
-                                        {% endif %}
-                                    {% endif %}
-                                    </h5>
+                                    <div class="d-flex">
+                                        <h5 class="card-title">Par {% if event.person.pk is not person.pk %}
+                                            <a class="show-user"
+                                               href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a>
+                                            {% else %}{{ event.person.pseudo }} {% endif %}
+                                            {% if event.person.note is not None %}
+                                                {% if event.person.note >= 7 %}
+                                                    <img height="25" width="25" src="{% static 'assets/good.svg' %}">
+                                                {% elif event.person.note < 7 and event.person.note >= 4 %}
+                                                    <img height="25" width="25" src="{% static 'assets/average.svg' %}">
+                                                {% else %}
+                                                    <img height="25" width="25" src="{% static 'assets/bad.svg' %}">
+                                                {% endif %}
+                                            {% endif %}
+                                        </h5>
 
-                                </div>
+                                    </div>
                                     <p class="card-text"><b>Catégorie :</b> {{ event.category|title }}</p>
-                                    <p class="card-text"><b>Lieu :</b> {{ event.city|title }} le {{ event.event_date|date:'d/m/y à h:m' }}</p>
-                                    {% if user.pk %}
-                                        <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de
-                                            détails</a>
-                                    {% endif %}
+                                    <p class="card-text"><b>Lieu :</b> {{ event.city|title }}
+                                        le {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                                    <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de
+                                        détails</a>
 
                                 </div>
                             </div>
@@ -125,7 +130,7 @@
                 radius: 500
             }).addTo(map);
             map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
-            {% if not lieu_filter %}
+            {% if not lieu_filter or not user.pk %}
                 circle.bindPopup("I am here").openPopup();
             {% endif %}
             for (let i = 0; i < markers.length; i++) {

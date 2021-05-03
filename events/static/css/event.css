@@ -63,3 +63,20 @@ h4 a, .show-user {
     position: absolute;
     bottom: 2%;
 }
+
+.carousel-control-prev,
+.carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    transition: all ease 0.4s;
+
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    height: 30%;
+    width: 30%;
+}

@@ -61,29 +61,11 @@
                                         <p class="card-text"><b>Lieu
                                             :</b> {{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}
                                             le {{ inscription.event.event_date|date:'d/m/y à h:m' }}</p>
-                                        <a class="text-danger action-card" data-toggle="modal" data-target="#close_modal">Se désinscrire</a>
+                                        <a class="text-danger action-card" data-toggle="modal" data-target="#close_modal{{ inscription.pk }}">Se désinscrire</a>
                                     </div>
                                 </div>
                             </div>
-{##}
-{#                            <div class="row ">#}
-{#                                <div class="col">#}
-{#                                    <a href="{% url 'description-event' inscription.event.pk %}"><h3#}
-{#                                            class="mt-3">{{ inscription.event.title }}</h3></a>#}
-{#                                    <span>({{ inscription.event.category }})</span>#}
-{#                                    <p>Par {% if inscription.event.person.pk is not person.pk %}#}
-{#                                        <a class="show-user"#}
-{#                                           href="{% url 'profil-show-user' inscription.event.person.pk %}">{{ inscription.event.person.pseudo }}</a> {% else %}#}
-{#                                        {{ inscription.event.person.pseudo }} {% endif %}#}
-{#                                        le {{ inscription.event.event_date|date:'d/m/y à h:m' }}#}
-{#                                    </p>#}
-{#                                    <p>{{ inscription.event.description }}</p>#}
-{#                                    <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>#}
-{#                                    <a class="text-danger" data-toggle="modal" data-target="#close_modal">Se#}
-{#                                        désinscire</a>#}
-{#                                </div>#}
-{#                            </div>#}
-                            <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
+                            <div id="close_modal{{ inscription.pk }}" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
                                  data-keyboard="false">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">

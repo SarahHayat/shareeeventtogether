@@ -43,14 +43,16 @@
                                         <div class="note justify-content-center align-items-center d-flex"
                                              style="height: 40px; width: 40px; font-size: x-large">
                                             {% if inscription.getKarma %}
-                                                 <div class="stacked-icons">
+                                                <div class="stacked-icons">
                                                     <span class="fa-stack">
                                                     <i class="fas fa-star fa-stack-2x"></i>
                                                     <strong class="fa-stack-1x fa-stack-text fa-inverse text-dark">5</strong>
                                                   </span>
-                                                 </div>
+                                                </div>
                                             {% else %}
-                                                <a class="text-success" data-toggle="modal" data-target="#rating_modal_{{ inscription.event.pk }}"><i class="far fa-star fa-2x"></i></a>
+                                                <a class="text-success" data-toggle="modal"
+                                                   data-target="#rating_modal_{{ inscription.event.pk }}"><i
+                                                        class="far fa-star fa-2x"></i></a>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -77,28 +79,6 @@
                                 </div>
                             </div>
 
-
-                            {#                            <div class="row">#}
-                            {#                                <div class="col">#}
-                            {#                                    <a href="{% url 'description-event' inscription.event.pk %}"><h3#}
-                            {#                                            class="mt-3">{{ inscription.event.title }}</h3>#}
-                            {#                                    </a><span>({{ inscription.event.category }})</span>#}
-                            {#                                    <p>Par {% if inscription.event.person.pk is not person.pk %}#}
-                            {#                                        <a class="show-user"#}
-                            {#                                           href="{% url 'profil-show-user' inscription.event.person.pk %}">{{ inscription.event.person.pseudo }}</a> {% else %}#}
-                            {#                                        {{ inscription.event.person.pseudo }} {% endif %}#}
-                            {#                                        le {{ inscription.event.event_date|date:'d/m/y à h:m' }}#}
-                            {#                                    </p>#}
-                            {#                                    <p>{{ inscription.event.description }}</p>#}
-                            {#                                    <p>{{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}</p>#}
-                            {#                                    {% if inscription.getKarma %}#}
-                            {#                                        <p class="text-success">{{ inscription.getKarma }}/10</p>#}
-                            {#                                    {% else %}#}
-                            {#                                        <a class="text-success" data-toggle="modal"#}
-                            {#                                           data-target="#rating_modal_{{ inscription.event.pk }}">Noter</a>#}
-                            {#                                    {% endif %}#}
-                            {#                                </div>#}
-                            {#                            </div>#}
                             <div id="rating_modal_{{ inscription.event.pk }}" class="modal fade" tabindex="-1"
                                  role="dialog"
                                  data-backdrop="static"
@@ -115,7 +95,10 @@
                                               action="{% url 'profil-rating-finished-events' inscription.event.pk %}">
                                             <div class="modal-body">
                                                 {% csrf_token %}
-                                                {% bootstrap_field form.note required_css_class='required' %}
+                                                <div class="col-md-2 d-flex">
+                                                    {{ form.note }}
+                                                    <i class="fas fa-star fa-2x" style="color:yellow;"></i>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button class="btn btn-link" type="button" data-dismiss="modal"
@@ -137,33 +120,6 @@
             </div>
         </div>
     </div>
-    <script>
-        {#$(document).on("click", "#rating", function () {#}
-        {#    console.log('CLICK')#}
-        {#     var event_id = $(this).data('id');#}
-        {#     $(".modal-body ").val( myBookId );#}
-        {#     // As pointed out in comments,#}
-        {#     // it is unnecessary to have to manually call the modal.#}
-        {#     // $('#addBookDialog').modal('show');#}
-
-
-        $(document).ready(function () {
-
-            $('#rating').on('click', function (e) {
-                console.log('CLICK')
-                let id = $('#rating').attr('data-id')
-                //let url = $(this).attr("href")
-                if (id != null) {
-                    //url = url + '?event=' + id
-                    window.history.replaceState(null, null, "?event=" + id);
-                }
-
-            })
-
-        })
-
-
-    </script>
 {% endblock %}
 {% block extra_js %}
 {% endblock %}

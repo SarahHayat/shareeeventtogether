@@ -61,12 +61,12 @@
                                                class="text-primary mr-2">Modifier</a>
                                             <a href="{% url 'delete-event' event.pk %}" class="text-danger"
                                                data-toggle="modal"
-                                               data-target="#close_modal">Supprimer</a>
+                                               data-target="#close_modal{{ event.pk }}">Supprimer</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="close_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
+                            <div id="close_modal{{ event.pk }}" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
                                  data-keyboard="false">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
