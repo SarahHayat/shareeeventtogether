@@ -22,19 +22,21 @@
 
         </div>
     </div>
-    <div class="row">
+
+    <div class="row" >
         <div class="col-md-4">
+
             <p>
                 <b>Prénom</b>
                 <br>
-                {{ profil_person.first_name }}
+                <span>{% if not profil_person.is_visible %} Informations non publiques {% else %} {{ profil_person.first_name }} {% endif %}</span>
             </p>
         </div>
         <div class="col-md-4">
             <p>
                 <b>Nom</b>
                 <br>
-                {{ profil_person.last_name }}
+                <span>{% if not profil_person.is_visible %} Informations non publiques {% else %} {{ profil_person.last_name }} {% endif %}</span>
             </p>
         </div>
     </div>
@@ -43,9 +45,11 @@
             <p>
                 <b>Email</b>
                 <br>
-                {{ profil_person.user.email }}
+               <span> {% if not profil_person.is_visible %}  Informations non publiques {% else %} {{ profil_person.user.email }} {% endif %}</span>
             </p>
         </div>
+
+
         <div class="col-md-4">
             <p>
                 <b>Karma</b>

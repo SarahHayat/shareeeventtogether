@@ -31,8 +31,12 @@ class PersonForm(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder': 'email@gmail.com'}),
             'phone_number': forms.TextInput(attrs={'placeholder': '0612344321'}),
-            'birth_date': forms.DateTimeInput(attrs={'type': 'date', })
+            'birth_date': forms.DateTimeInput(attrs={'type': 'date', }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
 
 
 class ProfilForm(forms.ModelForm):

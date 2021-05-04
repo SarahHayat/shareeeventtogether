@@ -122,3 +122,9 @@ label:hover, label:hover ~ label { color: #eecb10;  } /* color previous stars on
 input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
 input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
 label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #F0DF94;  }
+
+.not-visible span {
+       color: transparent;
+   text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    content: "Don't try to read it"
+}
