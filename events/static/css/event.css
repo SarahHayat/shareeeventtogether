@@ -80,3 +80,21 @@ h4 a, .show-user {
     height: 30%;
     width: 30%;
 }
+
+.blockquote-custom {
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.blockquote-custom-icon {
+  width: 250px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -25px;
+  left: 50px;
+    background: #70B7AE!important;
+}
