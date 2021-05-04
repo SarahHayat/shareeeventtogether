@@ -18,10 +18,7 @@ class EventForm(forms.ModelForm):
 class KarmaForm(forms.ModelForm):
     class Meta:
         model = Karma
-        exclude = ['person', 'event', ]
-        widgets = {
-            'note': forms.NumberInput(attrs={'max': 10, 'min': 0})
-        }
+        exclude = ['person', 'event', 'note']
 
 
 class PersonForm(forms.ModelForm):

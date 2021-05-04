@@ -76,6 +76,7 @@
                                             :</b> {{ inscription.event.event_date|date:'d/m/y à h:m' }}</p>
 
                                     </div>
+
                                 </div>
                             </div>
 
@@ -91,21 +92,82 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form method="post"
+                                        <form method="post" id="form_rating_{{ inscription.event.pk }}"
                                               action="{% url 'profil-rating-finished-events' inscription.event.pk %}">
-                                            <div class="modal-body">
+                                            <div class="modal-body text-center">
                                                 {% csrf_token %}
-                                                <div class="col-md-2 d-flex">
-                                                    {{ form.note }}
-                                                    <i class="fas fa-star fa-2x" style="color:yellow;"></i>
-                                                </div>
+                                                {#                                                    {{ form.note }}#}
+                                                {#                                                    <i class="fas fa-star fa-2x" style="color:yellow;"></i>#}
+                                             <p>Veuillez noter la prestation de l'évènement <b>{{ inscription.event.title|title }}</b> </p>
+                                                <fieldset id="fieldset_{{ inscription.event.pk }}" class="rate">
+
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating10"
+                                                           name="rating"
+                                                           value="10"/><label
+                                                        for="modal_{{ inscription.event.pk }}_rating10"
+                                                        title="10 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating9"
+                                                           name="rating" value="9"/><label
+                                                        class="half" for="modal_{{ inscription.event.pk }}_rating9"
+                                                        title="9 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating8"
+                                                           name="rating" value="8"/><label
+                                                        for="rating8" title="8 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating7"
+                                                           name="rating" value="7"/><label
+                                                        class="half" for="modal_{{ inscription.event.pk }}_rating7"
+                                                        title="7 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating6"
+                                                           name="rating" value="6"/><label
+                                                        for="modal_{{ inscription.event.pk }}_rating6"
+                                                        title="6 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating5"
+                                                           name="rating" value="5"/><label
+                                                        class="half" for="modal_{{ inscription.event.pk }}_rating5"
+                                                        title="5 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating4"
+                                                           name="rating" value="4"/><label
+                                                        for="modal_{{ inscription.event.pk }}_rating4"
+                                                        title="4 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating3"
+                                                           name="rating" value="3"/><label
+                                                        class="half" for="modal_{{ inscription.event.pk }}_rating3"
+                                                        title="3 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating2"
+                                                           name="rating" value="2"/><label
+                                                        for="modal_{{ inscription.event.pk }}_rating2"
+                                                        title="2 étoiles"></label>
+                                                    <input type="radio" id="modal_{{ inscription.event.pk }}_rating1"
+                                                           name="rating" value="1"/><label
+                                                        class="half" for="modal_{{ inscription.event.pk }}_rating1"
+                                                        title="1 étoile"></label>
+
+                                                </fieldset>
+                                                {% block extra_js %}
+                                                    <script>
+                                                        $(document).ready(function () {
+                                                            $('#form_rating_{{ inscription.event.pk }}').on('submit', function (e) {
+                                                                let url = $(this).attr('action');
+                                                                $('#fieldset_{{ inscription.event.pk }}').find('input[type=radio]').each(function () {
+                                                                    if ($(this).prop('checked')) {
+                                                                        url = url + '?rating=' + $(this).attr('value')
+                                                                    }
+                                                                    window.location = url
+                                                                    event.preventDefault()
+                                                                })
+                                                            })
+                                                        })
+                                                    </script>
+                                                {% endblock %}
                                             </div>
                                             <div class="modal-footer">
                                                 <button class="btn btn-link" type="button" data-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">Annuler</span>
                                                 </button>
-                                                <button type="submit" class="btn btn-primary">Confirmer</button>
+                                                <button id="submit_button" type="submit" class="btn btn-primary">
+                                                    Confirmer
+                                                </button>
                                             </div>
                                         </form>
                                     </div>
@@ -120,6 +182,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
-{% block extra_js %}
 {% endblock %}

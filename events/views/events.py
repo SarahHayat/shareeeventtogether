@@ -1,7 +1,7 @@
 import requests
 from django.core import serializers
 from django.db.models import Avg
-from django.http import Http404
+from django.http import Http404, QueryDict
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -159,16 +159,18 @@ class ProfileFinishedEventsView(PersonView):
 
 class ProfileRatingFinishedEventsView(PersonView):
 
-    def post(self, request, event_id, *args, **kwargs):
+    def get(self, request, event_id, *args, **kwargs):
         try:
             user = request.user
             person = get_person_by_user(user)
             event = get_event_by_id(event_id)
             person_event = get_person_by_id(event.person.pk)
             form = KarmaForm(data=request.POST)
+            rating = request.GET.get('rating', 5)
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
+                karma.note = rating
                 karma.person = person
                 karma.save()
                 note = Karma.objects.filter(event__person=event.person).aggregate(Avg('note'))
