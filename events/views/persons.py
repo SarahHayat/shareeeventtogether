@@ -100,14 +100,16 @@ class EditProfilView(PersonView):
 
 class ProfilShowUserView(PersonView):
     def get(self, request, person_id):
-        person = get_person_by_id(person_id)
+        profil_person = get_person_by_id(person_id)
         user = request.user
+        person = get_person_by_user(user)
         context = {
-            'person': person,
+            'profil_person': profil_person,
             'user': user,
+            'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
-        if get_person_by_user(user) == person:
+        if get_person_by_user(user) == profil_person:
             return redirect(reverse('profil'))
         else:
             return render(request, 'persons/profil/profil_show_user.html', context)
@@ -116,10 +118,12 @@ class ProfilShowUserView(PersonView):
 class ProfilShowEventView(PersonView):
 
     def get(self, request, person_id):
-        person = get_person_by_id(person_id)
+        profil_person = get_person_by_id(person_id)
         user = request.user
-        events = Event.objects.filter(person=person, event_date__gte=timezone.now())
+        person = get_person_by_user(user)
+        events = Event.objects.filter(person=profil_person, event_date__gte=timezone.now())
         context = {
+            'profil_person': profil_person,
             'person': person,
             'user': user,
             'events': events,

@@ -78,9 +78,9 @@
                                         <div class="d-flex justify-content-between align-items-center card-header">
                                             <p class="m-0 h4">{{ event.title|title }}</p>
                                             {% if event.person.person_type == "particulier" %}
-                                                <i class="fas fa-user"></i>
+                                                <i class="fas fa-user" title="particulier"></i>
                                             {% else %}
-                                                <i class="fas fa-user-tie"></i>
+                                                <i class="fas fa-user-tie" title="professionnel"></i>
                                             {% endif %}
                                         </div>
                                         <div class="card-body">
