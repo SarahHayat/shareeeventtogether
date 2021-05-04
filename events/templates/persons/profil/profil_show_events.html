@@ -1,34 +1,66 @@
 {% extends 'persons/base_navbar.html' %}
+{% load bootstrap4 %}
 {% load static %}
 
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-    <ul class="nav nav-tabs">
+    <ul class="profil-tab nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-show-user' person.pk %}">Profil</a>
+            <a class="nav-link" href="{% url 'profil-show-user' profil_person.pk %}">Profil</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-show-events' person.pk %}">Events</a>
+            <a class="nav-link" href="{% url 'profil-show-events' profil_person.pk %}">Events</a>
         </li>
     </ul>
     <div class="row">
         <div class="col mt-3">
             <div class="row">
-                <h1 class="col-md-7">Mes Évenements</h1>
+                <h1 class="col-md-7">Évenements proposés par {{ profil_person.pseudo }}</h1>
             </div>
-            {% for event in events %}
-                <div class="row ">
-                    <div class="col">
-                        <a href="{% url 'description-event' event.pk %}"><h3 class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3></a>
-                        <p>{{ event.event_date|date:'d/m - h:m' }}</p>
-                        <p>{{ event.description }}</p>
-                        <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+            <div class="row d-flex">
+                {% for event in events %}
+
+                    <div class="col-md-4">
+                        <div class="card mt-3">
+                            {% with 'assets/category/'|add:event.category|add:'.jpeg' as category %}
+                                <img src="{% static category %}" class="card-img category-img">
+                            {% endwith %}
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <p class="text-left"><a
+                                            href="{% url 'description-event' event.pk %}"><h4
+                                            class="mt-3">{{ event.title|title }}</h4></a></p>
+                                </div>
+                                <p>Par {% if event.person.pk is not profil_person.pk %}
+                                    <a class="show-user"
+                                       href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
+                                    {{ event.person.pseudo }} {% endif %}
+                                    le {{ event.event_date|date:'d/m/y à h:m' }}
+                                </p>
+                                <p class="card-text"><b>Catégorie :</b> {{ event.category|title }}
+                                </p>
+                                <p class="card-text"><b>Lieu :</b> {{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>
+                                <p class="card-text"><b>Date :</b> {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            {% empty %}
-                <p>Il n'y a pas d'évenements pour le moment</p>
-            {% endfor %}
+
+
+
+{#                    <div class="row ">#}
+{#                        <div class="col">#}
+{#                            <a href="{% url 'description-event' event.pk %}"><h3#}
+{#                                    class="col-md-12 p-0 mt-3">{{ event.title }} ({{ event.category }})</h3></a>#}
+{#                            <p>{{ event.event_date|date:'d/m - h:m' }}</p>#}
+{#                            <p>{{ event.description }}</p>#}
+{#                            <p>{{ event.address }}, {{ event.zip_code }}, {{ event.city }}</p>#}
+{#                        </div>#}
+{#                    </div>#}
+                {% empty %}
+                    <p>Il n'y a pas d'évenements pour le moment</p>
+                {% endfor %}
+            </div>
         </div>
 
     </div>

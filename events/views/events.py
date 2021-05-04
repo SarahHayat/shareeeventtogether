@@ -1,7 +1,7 @@
 import requests
 from django.core import serializers
 from django.db.models import Avg
-from django.http import Http404
+from django.http import Http404, QueryDict
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -25,62 +25,52 @@ from events.views.persons import PersonView
 class EventDetailsView(View):
     def get(self, request):
         user = request.user
-        if user.pk:
-            query = self.request.GET.get('q')
-            person = get_person_by_user(user)
-            category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
-            lieu_filter = request.GET.get('lieu')
+        # if user.pk:
+        query = self.request.GET.get('q')
+        person = get_person_by_user(user) if user.pk else None
+        api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1") if user.pk else None
+        reponse = api_request.json() if user.pk else None
+        coordonate_x = reponse['features'][0]['geometry']['coordinates'][1] if user.pk else 48.8
+        coordonate_y = reponse['features'][0]['geometry']['coordinates'][0] if user.pk else 2.3
+        category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
+        lieu_filter = request.GET.get('lieu')
 
-            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1")
+        if query is not None:
+            events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(
+                event_date__gte=timezone.now())
+            filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)
+            category = get_events_categories(events_search)
+        elif lieu_filter is not None:
+            events = Event.objects.filter(city=lieu_filter, event_date__gte=timezone.now())
+            filtered_events = get_filtered_events(events, category_filter, lieu_filter)
+            category = get_events_categories(events)
+            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter}&autocomplete=0&limit=1")
             reponse = api_request.json()
             coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
             coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
-
-            if query is not None:
-                events_search = Event.objects.filter(Q(title__icontains=query) | Q(category__icontains=query)).filter(
-                    event_date__gte=timezone.now())
-                filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)
-                category = get_events_categories(events_search)
-            elif lieu_filter is not None:
-                events = Event.objects.filter(city=lieu_filter, event_date__gte=timezone.now())
-                filtered_events = get_filtered_events(events, category_filter, lieu_filter)
-                category = get_events_categories(events)
-                api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter}&autocomplete=0&limit=1")
-                reponse = api_request.json()
-                coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
-                coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
-            else:
-                events = get_all_events()
-                filtered_events = get_filtered_events(events, category_filter, lieu_filter)
-                category = get_events_categories(events)
-            order_filter = request.GET.get('order_filter', 'event_date')
-            if order_filter == 'event_date':
-                filtered_events = filtered_events.order_by('event_date')
-            else:
-                filtered_events = filtered_events.order_by('-event_date')
-
-            context = {
-                'user': user,
-                'person': person,
-                'filtered_events': filtered_events,
-                'category': category,
-                'lieu_filter': lieu_filter,
-                'order_filter': order_filter,
-                'category_filter': category_filter,
-                'query': query,
-                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
-                'coordonate_x': str(coordonate_x).replace(",", "."),
-                'coordonate_y': str(coordonate_y).replace(",", ".")
-            }
         else:
             events = get_all_events()
-            user = request.user
-            context = {
-                'user': user,
-                'events': events,
-                'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+            filtered_events = get_filtered_events(events, category_filter, lieu_filter)
+            category = get_events_categories(events)
+        order_filter = request.GET.get('order_filter', 'event_date')
+        if order_filter == 'event_date':
+            filtered_events = filtered_events.order_by('event_date')
+        else:
+            filtered_events = filtered_events.order_by('-event_date')
 
-            }
+        context = {
+            'user': user,
+            'person': person,
+            'filtered_events': filtered_events,
+            'category': category,
+            'lieu_filter': lieu_filter,
+            'order_filter': order_filter,
+            'category_filter': category_filter,
+            'query': query,
+            'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
+            'coordonate_x': str(coordonate_x).replace(",", "."),
+            'coordonate_y': str(coordonate_y).replace(",", ".")
+        }
         return render(request, 'events/event_list.html', context)
 
 
@@ -130,7 +120,6 @@ class ProfileEventDetailsView(PersonView):
             'events': events,
             'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_events_details.html', context)
 
@@ -146,7 +135,6 @@ class ProfileRegisteredEventsView(PersonView):
             'person': person,
             'inscription_events': inscription_events,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_registered_events.html', context)
 
@@ -165,23 +153,24 @@ class ProfileFinishedEventsView(PersonView):
             'form': form,
             'inscription_events': inscription_events,
             'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
         }
         return render(request, 'persons/events/my_finished_events.html', context)
 
 
 class ProfileRatingFinishedEventsView(PersonView):
 
-    def post(self, request, event_id, *args, **kwargs):
+    def get(self, request, event_id, *args, **kwargs):
         try:
             user = request.user
             person = get_person_by_user(user)
             event = get_event_by_id(event_id)
             person_event = get_person_by_id(event.person.pk)
             form = KarmaForm(data=request.POST)
+            rating = request.GET.get('rating', 5)
             if form.is_valid():
                 karma = form.save(commit=False)
                 karma.event = event
+                karma.note = rating
                 karma.person = person
                 karma.save()
                 note = Karma.objects.filter(event__person=event.person).aggregate(Avg('note'))
@@ -198,7 +187,7 @@ class DesinscriptionEventView(PersonView):
     def get(self, request, inscription_id):
         inscription = get_inscription_by_id(inscription_id)
         inscription.delete()
-        return redirect(reverse('description-event', kwargs={'event_id': inscription.event.pk}))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class DeleteEventView(PersonView):
@@ -213,7 +202,6 @@ class EditEventView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
-        print(event.event_date)
         form = EventForm(instance=event)
         context = {
             'person': person,
@@ -244,19 +232,21 @@ class EditEventView(PersonView):
             return render(request, 'persons/events/my_events_form.html', context)
 
 
-class EventDescriptionView(PersonView):
+class EventDescriptionView(View):
     def get(self, request, event_id):
         user = request.user
-        person = get_person_by_user(user)
         event = get_event_by_id(event_id)
+        person = get_person_by_user(user) if user.pk else None
         is_registered = get_if_person_is_registered(person, event)
         is_favorite = get_if_event_is_fav(person, event)
         favorite = None
         inscrit = None
         if is_favorite:
-            favorite = FavoriteEvent.objects.get(person=person, event=event)
+            favorite = FavoriteEvent.objects.get(person=person, event=event) if user.pk else None
         if is_registered:
-            inscrit = InscriptionEvent.objects.get(person=person, event=event)
+            inscrit = InscriptionEvent.objects.get(person=person, event=event) if user.pk else None
+
+        events_caroussel = Event.objects.filter(category=event.category, event_date__gte=timezone.now()).exclude(pk=event_id)
         context = {
             'user': user,
             'person': person,
@@ -265,6 +255,7 @@ class EventDescriptionView(PersonView):
             'is_favorite': is_favorite,
             'favorite': favorite,
             'inscrit': inscrit,
+            'events_caroussel' : events_caroussel,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'events/event_detail.html', context)
@@ -275,8 +266,10 @@ class EventInscriptionView(PersonView):
         user = request.user
         person = get_person_by_user(user)
         event = get_event_by_id(event_id)
-        inscription = InscriptionEvent(person=person, event=event)
-        inscription.save()
+        is_registered = get_if_person_is_registered(person, event)
+        if not is_registered or person != event.person:
+            inscription = InscriptionEvent(person=person, event=event)
+            inscription.save()
         return redirect(reverse('description-event', kwargs={'event_id': event.pk}))
 
 
@@ -295,7 +288,7 @@ class UnfavoriteEventView(PersonView):
     def get(self, request, favorite_id):
         favorite = get_favorite_by_id(favorite_id)
         favorite.delete()
-        return redirect(reverse('description-event', kwargs={'event_id': favorite.event.pk}))
+        return redirect(request.META.get('HTTP_REFERER'))
 
 
 class ProfileFavoriteEventsView(PersonView):

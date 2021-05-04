@@ -25,6 +25,7 @@ class Person(models.Model):
     created_at = models.DateTimeField('crée à', auto_now=True)
     note = models.IntegerField('karma', null=True, blank=True)
     imageProfil = models.FileField('image', null=True, default='utilisateur-de-profil.svg')
+    is_visible = models.BooleanField('est visible', default=False)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'

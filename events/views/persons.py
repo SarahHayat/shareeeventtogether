@@ -8,7 +8,7 @@ from django.views import View
 from events import navigation
 from events.forms import PersonForm, ProfilForm
 from events.models import Event, InscriptionEvent
-from events.models_helpers import get_person_by_id, get_if_person_is_registered
+from events.models_helpers import get_person_by_id, get_if_person_is_registered, get_person_by_user
 from persons.models import Person
 from users.models import User
 
@@ -100,24 +100,30 @@ class EditProfilView(PersonView):
 
 class ProfilShowUserView(PersonView):
     def get(self, request, person_id):
-        person = get_person_by_id(person_id)
+        profil_person = get_person_by_id(person_id)
         user = request.user
+        person = get_person_by_user(user)
         context = {
-            'person': person,
+            'profil_person': profil_person,
             'user': user,
+            'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
-
-        return render(request, 'persons/profil/profil_show_user.html', context)
+        if get_person_by_user(user) == profil_person:
+            return redirect(reverse('profil'))
+        else:
+            return render(request, 'persons/profil/profil_show_user.html', context)
 
 
 class ProfilShowEventView(PersonView):
 
     def get(self, request, person_id):
-        person = get_person_by_id(person_id)
+        profil_person = get_person_by_id(person_id)
         user = request.user
-        events = Event.objects.filter(person=person, event_date__gte=timezone.now())
+        person = get_person_by_user(user)
+        events = Event.objects.filter(person=profil_person, event_date__gte=timezone.now())
         context = {
+            'profil_person': profil_person,
             'person': person,
             'user': user,
             'events': events,

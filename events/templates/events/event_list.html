@@ -3,7 +3,7 @@
 {% load leaflet_tags %}
 
 {% block content %}
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-md-12 mt-3">
             <div class="row">
                 <div class="col-md-7">
@@ -11,7 +11,7 @@
                 </div>
                 <div class="col-md-5 text-right">
                     {% if user.pk %}
-                        <a class="btn btn-primary" href="{% url 'create-event' %}">Ajouter</a>
+                        <a class="add btn btn-primary" href="{% url 'create-event' %}">Ajouter</a>
                     {% endif %}
                 </div>
 
@@ -29,7 +29,7 @@
                         </div>
                         <div class="row">
                             <div class="col-7">
-                                <button class="btn btn-outline-primary" type="submit">Recherche</button>
+                                <button class="badge badge-pill badge-primary" type="submit">Recherche</button>
                             </div>
                         </div>
                     </form>
@@ -58,7 +58,6 @@
                     <b>Ordre</b>
                     <ul class="list-unstyled">
                         <li>
-
                             <a class="badge badge-pill badge-{% if order_filter == 'event_date' %}primary{% else %}light{% endif %}"
                                href="{% url 'events' %}?category_filter={{ category_filter }}&order_filter=event_date{% if query is not None %}&q=
                                    {{ query }}{% elif lieu_filter is not None %}&lieu={{ lieu_filter }}{% endif %}"><i
@@ -70,43 +69,60 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-8 p-0">
+                <div class="col-md-9 p-0">
                     {% if filtered_events %}
-                        {% for event in filtered_events %}
-                            <div class="row">
-                                <div class="col p-0 mb-3">
-                                    <div class="row d-flex align-items-center">
-                                        <div class="col-10 d-flex align-items-center">
-                                            <h3>{{ event.title|title }}
-                                                ({{ event.category|title }})</h3>
-                                            <span class="badge badge-pill badge-info h6">{{ event.person.person_type }}</span>
-                                        </div>
-                                        <div class="col-2 text-right">
-                                            {% if event.person.note is not None %}
-                                                {% if event.person.note >= 7 %}
-                                                    <img height="25" width="25" src="{% static 'assets/good.svg' %}">
-                                                {% elif event.person.note < 7 and event.person.note >= 4 %}
-                                                    <img height="25" width="25" src="{% static 'assets/average.svg' %}">
-                                                {% else %}
-                                                    <img height="25" width="25" src="{% static 'assets/bad.svg' %}">
-                                                {% endif %}
+                        <div class="row d-flex">
+                            {% for event in filtered_events %}
+                                <div class="col-md-12">
+                                    <div class="card mt-3">
+                                        <div class="d-flex justify-content-between align-items-center card-header">
+                                            <p class="m-0 h4">{{ event.title|title }}</p>
+                                            {% if event.person.person_type == "particulier" %}
+                                                <i class="fas fa-user" title="particulier"></i>
+                                            {% else %}
+                                                <i class="fas fa-user-tie" title="professionnel"></i>
                                             {% endif %}
                                         </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    {% with 'assets/category/'|add:event.category|add:'.jpeg' as category %}
+                                                        <img src="{% static category %}" class="card-img">
+                                                    {% endwith %}
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <h5 class="card-title">Par {% if event.person.pk is not person.pk %}
+                                                        <a class="show-user"
+                                                           href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a>
+                                                        {% else %}{{ event.person.pseudo }} {% endif %}
+                                                        {% if event.person.note is not None %}
+                                                            {% if event.person.note >= 7 %}
+                                                                <img height="25" width="25"
+                                                                     src="{% static 'assets/good.svg' %}">
+                                                            {% elif event.person.note < 7 and event.person.note >= 4 %}
+                                                                <img height="25" width="25"
+                                                                     src="{% static 'assets/average.svg' %}">
+                                                            {% else %}
+                                                                <img height="25" width="25"
+                                                                     src="{% static 'assets/bad.svg' %}">
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </h5>
+                                                    <p class="card-text"><b>Catégorie :</b> {{ event.category|title }}
+                                                    </p>
+                                                    <p class="card-text"><b>Lieu :</b> {{ event.city|title }}
+                                                        le {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                                                    <a href="{% url 'description-event' event.pk %}"
+                                                       class="btn btn-primary">Plus
+                                                        de
+                                                        détails</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p>Par {% if event.person.pk is not person.pk %}
-                                        <a href="{% url 'profil-show-user' event.person.pk %}">{{ event.person.pseudo }}</a> {% else %}
-                                        {{ event.person.pseudo }} {% endif %}
-                                        le {{ event.event_date|date:'d/m/y à h:m' }}</p>
-
-                                    <p>{{ event.city|title }}</p>
-                                    {% if user.pk %}
-                                        <a href="{% url 'description-event' event.pk %}" class="btn btn-primary">Plus de
-                                            détails</a>
-                                    {% endif %}
-                                    <hr>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                         </div>
                     {% else %}
                         <p>Il n'y a pas d'évenements pour le moment</p>
@@ -127,16 +143,16 @@
             {% endfor %}
             // marker for person position
 
-                var circle = L.circle(["{{ coordonate_x }}", "{{ coordonate_y }}"], {
-                    color: 'red',
-                    fillColor: '#f03',
-                    fillOpacity: 0.5,
-                    radius: 500
-                }).addTo(map);
-                map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
-                {% if not lieu_filter %}
-                    circle.bindPopup("I am here").openPopup();
-                {% endif %}
+            var circle = L.circle(["{{ coordonate_x }}", "{{ coordonate_y }}"], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 500
+            }).addTo(map);
+            map.setView(["{{ coordonate_x }}", "{{ coordonate_y }}"], 10);
+            {% if not lieu_filter or not user.pk %}
+                circle.bindPopup("I am here").openPopup();
+            {% endif %}
             for (let i = 0; i < markers.length; i++) {
                 markers[i].addTo(map)
             }

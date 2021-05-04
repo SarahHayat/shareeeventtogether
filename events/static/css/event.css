@@ -1,0 +1,130 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+body {
+    background-color: whitesmoke !important;
+}
+
+.back-nav {
+    background-color: #478680 !important;
+}
+
+.search {
+    background-color: #F0DF94 !important;
+    color: #478680 !important;
+    border: none !important;
+}
+
+.search:hover {
+    color: #ED773C !important;
+    border: none !important;
+}
+
+.btn-primary, .btn-outline-primary {
+    background-color: #70B7AE !important;
+    border: none !important;
+}
+
+.badge-primary {
+    background-color: #7ebcb5 !important;
+    color: white !important;
+}
+
+.profil-tab .nav-link {
+    color: #70B7AE !important;
+}
+
+h4 a, .show-user {
+    color: #7ebcb5 !important;
+}
+
+.category-img {
+    height: 280px;
+    object-fit: cover;
+    filter: brightness(70%);
+}
+
+.favorite, .note {
+    position: absolute;
+    right: 5%;
+    top: 5%
+}
+
+.note i{
+    color: yellow;
+}
+
+.note a{
+    cursor: pointer;
+}
+
+.card-body {
+    height: 250px;
+}
+
+.action-card {
+    position: absolute;
+    bottom: 2%;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    transition: all ease 0.4s;
+
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    height: 30%;
+    width: 30%;
+}
+
+/* Ratings widget */
+.rate {
+    display: inline-block;
+    border: 0;
+}
+/* Hide radio */
+.rate > input {
+    display: none;
+}
+/* Order correctly by floating highest to the right */
+.rate > label {
+    float: right;
+    padding: 0;
+    margin: 0;
+}
+/* The star of the show */
+.rate > label:before {
+    display: inline-block;
+    font-size: 2rem;
+    padding: .3rem .2rem;
+    margin: 0;
+    cursor: pointer;
+    font-family: FontAwesome;
+    content: "\f005 "; /* full star */
+}
+
+/* Half star trick */
+.rate .half:before {
+    content: "\f089 "; /* half star no outline */
+    position: absolute;
+    padding-right: 0;
+}
+/* Click + hover color */
+input:checked ~ label, /* color current and previous stars on checked */
+label:hover, label:hover ~ label { color: #eecb10;  } /* color previous stars on hover */
+
+/* Hover highlights */
+input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
+input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #F0DF94;  }
+
+.not-visible span {
+       color: transparent;
+   text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    content: "Don't try to read it"
+}

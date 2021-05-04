@@ -2,39 +2,46 @@
 {% load static %}
 
 {% block header %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'home' %}">ShareEventTogether</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="back-nav navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'assets/logo1.png' %}" height="50"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                {% for item in navigation_items %}
-                    <li class="nav-item {% if item.active %}active{% endif %}">
-                        <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
-                    </li>
-                {% endfor %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Menu
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    {% for item in navigation_items %}
+                        <li class="nav-item {% if item.active %}active{% endif %}">
+                            <a class="nav-link" href="{{ item.url }}">{{ item.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <form action="{% url 'events' %}" class="form-inline my-2 my-lg-0 ml-auto mr-5" method="get">
+                    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search"
+                           aria-label="Search">
+                    <button class="search btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav mr-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="far fa-user"></i> {{ person.pseudo }}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% if user.pk %}
-                            <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>
-                                Déconnexion</a>
-                        {% else %}
-                            <a class="dropdown-item" href="{% url 'login' %}">Connexion / Creer un compte</a>
-                        {% endif %}
-                    </div>
-                </li>
-            </ul>
-            <form action="{% url 'events' %}" class="form-inline my-2 my-lg-0" method="get">
-                <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            {% if user.pk %}
+                                <a class="dropdown-item" href="{% url 'profil' %}"><i class="fas fa-user-cog"></i>
+                                    Profil</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>
+                                    Déconnexion</a>
+                            {% else %}
+                                <a class="dropdown-item" href="{% url 'login' %}">Connexion/Creer un compte</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </nav>
 {% endblock %}

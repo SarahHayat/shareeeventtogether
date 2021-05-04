@@ -4,37 +4,39 @@
 {% block title %}Profil{% endblock %}
 
 {% block content %}
-    <ul class="nav nav-tabs">
+    <ul class="profil-tab nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-show-user' person.pk %}">Profil</a>
+            <a class="nav-link" href="{% url 'profil-show-user' profil_person.pk %}">Profil</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'profil-show-events' person.pk %}">Events</a>
+            <a class="nav-link" href="{% url 'profil-show-events' profil_person.pk %}">Events</a>
         </li>
     </ul>
     <div class="row my-3">
         <div class="col-md-8">
             <div>
-                <h2 class="display-1">{{ person.pseudo }}</h2>
-                <p class="text-muted"> ({{ person.person_type }})</p>
+                <h2 class="display-1">{{ profil_person.pseudo }}</h2>
+                <p class="text-muted"> ({{ profil_person.person_type }})</p>
             </div>
-            <img class="rounded-circle mr-5" height="70" width="70" src="{{ person.imageProfil.url }}">
+            <img class="rounded-circle mr-5" height="70" width="70" src="{{ profil_person.imageProfil.url }}">
 
         </div>
     </div>
-    <div class="row">
+
+    <div class="row" >
         <div class="col-md-4">
+
             <p>
                 <b>Prénom</b>
                 <br>
-                {{ person.first_name }}
+                <span>{% if not profil_person.is_visible %} Informations non publiques {% else %} {{ profil_person.first_name }} {% endif %}</span>
             </p>
         </div>
         <div class="col-md-4">
             <p>
                 <b>Nom</b>
                 <br>
-                {{ person.last_name }}
+                <span>{% if not profil_person.is_visible %} Informations non publiques {% else %} {{ profil_person.last_name }} {% endif %}</span>
             </p>
         </div>
     </div>
@@ -43,15 +45,17 @@
             <p>
                 <b>Email</b>
                 <br>
-                {{ person.user.email }}
+               <span> {% if not profil_person.is_visible %}  Informations non publiques {% else %} {{ profil_person.user.email }} {% endif %}</span>
             </p>
         </div>
+
+
         <div class="col-md-4">
             <p>
                 <b>Karma</b>
                 <br>
-                {% if person.note is not None %}
-                    {{ person.note }}
+                {% if profil_person.note is not None %}
+                    {{ profil_person.note }}
                 {% else %}
                     <span>Cette personne n'a pas de note pour le moment :(</span>
                 {% endif %}
@@ -63,14 +67,14 @@
             <p>
                 <b>Ville</b>
                 <br>
-                {{ person.city }}
+                {{ profil_person.city }}
             </p>
         </div>
         <div class="col-md-4">
             <p>
                 <b>Pays</b>
                 <br>
-                {{ person.country }}
+                {{ profil_person.country }}
             </p>
         </div>
     </div>
