@@ -36,15 +36,17 @@ class PersonForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
+        self.fields[
+            'is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
 
 
 class ProfilForm(forms.ModelForm):
     email = forms.EmailField(label='Email', max_length=254)
+    password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = Person
-        exclude = ['user', 'created_at', 'karma', 'person_type', 'birth_date', 'pseudo', ]
+        exclude = ['user', 'created_at', 'karma', 'person_type', 'birth_date']
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
             'phone_number': forms.TextInput(attrs={'placeholder': '0612344321'}),
@@ -54,7 +56,8 @@ class ProfilForm(forms.ModelForm):
         super().__init__(instance=instance, *args, **kwargs)
         if instance:
             self.fields['email'].initial = instance.user.email
-            self.fields['is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
+            self.fields[
+                'is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -67,3 +70,11 @@ class ProfilForm(forms.ModelForm):
             raise ValidationError('Cette adresse email est déjà utilisée')
 
         return email
+
+
+class DeleteUserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = Person
+        fields = ['pseudo', 'password']

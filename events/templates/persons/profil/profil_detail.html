@@ -1,5 +1,6 @@
 {% extends 'persons/base_navbar.html' %}
 {% load static %}
+{% load bootstrap4 %}
 
 {% block title %}Profil{% endblock %}
 
@@ -34,6 +35,8 @@
         </div>
         <div class="col-md-4 text-right">
             <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
+            <button data-toggle="modal" data-target="#delete_modal"><i class="fas fa-user-times"></i>Supprimer le
+                profil</button>
         </div>
     </div>
     <div class="row">
@@ -118,6 +121,39 @@
                     <span>Vous n'avez pas de note pour le moment :(</span>
                 {% endif %}
             </p>
+        </div>
+    </div>
+    <div id="delete_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Supprimer mon profil</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="{% url 'profil-delete' %}">
+                    <div class="modal-body text-center">
+                        {% csrf_token %}
+                        <p>Voulez vraiment supprimer votre profil ? Cette action est irréversible</p>
+                        {% bootstrap_field formDelete.pseudo required_css_class='required'%}
+                        {% bootstrap_field formDelete.password required_css_class='required'%}
+{#                        <label for="pseudo">Pseudo</label>#}
+{#                        <input type="text" id="pseudo" name="pseudo" required>#}
+{#                        <label for="password">Mot de passe</label>#}
+{#                        <input type="password" id="password" name="password" required>#}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-link" type="button" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">Annuler</span>
+                        </button>
+                        <button id="submit_button" type="submit" class="btn btn-primary">
+                            Confirmer
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 {% endblock content %}
