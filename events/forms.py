@@ -48,13 +48,13 @@ class ProfilForm(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
             'phone_number': forms.TextInput(attrs={'placeholder': '0612344321'}),
-
         }
 
     def __init__(self, instance=None, *args, **kwargs):
         super().__init__(instance=instance, *args, **kwargs)
         if instance:
             self.fields['email'].initial = instance.user.email
+            self.fields['is_visible'].label = "Voulez-vous que votre mail, votre nom et prénom soient visible sur votre profil ?"
 
     def clean_email(self):
         email = self.cleaned_data['email']

@@ -41,12 +41,11 @@ class EventDetailsView(View):
             filtered_events = get_filtered_events(events_search, category_filter, lieu_filter)
             category = get_events_categories(events_search)
         elif lieu_filter is not None:
-            events = Event.objects.filter(city=lieu_filter, event_date__gte=timezone.now())
-            filtered_events = get_filtered_events(events, category_filter, lieu_filter)
+            events = Event.objects.filter(city=lieu_filter.upper(), event_date__gte=timezone.now())
+            filtered_events = get_filtered_events(events, category_filter, lieu_filter.upper())
             category = get_events_categories(events)
-            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter}&autocomplete=0&limit=1")
+            api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter.upper()}&autocomplete=0&limit=1")
             reponse = api_request.json()
-            print(reponse)
             coordonate_x = reponse['features'][0]['geometry']['coordinates'][1] if reponse['features'] is [] else 48.866667
             coordonate_y = reponse['features'][0]['geometry']['coordinates'][0] if reponse['features'] is [] else 2.333333
         else:
@@ -120,7 +119,7 @@ class ProfileEventDetailsView(PersonView):
             'user': user,
             'events': events,
             'person': person,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/events/my_events_details.html', context)
 
@@ -135,7 +134,7 @@ class ProfileRegisteredEventsView(PersonView):
             'user': user,
             'person': person,
             'inscription_events': inscription_events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/events/my_registered_events.html', context)
 
@@ -153,7 +152,7 @@ class ProfileFinishedEventsView(PersonView):
             'person': person,
             'form': form,
             'inscription_events': inscription_events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/events/my_finished_events.html', context)
 
@@ -302,7 +301,6 @@ class ProfileFavoriteEventsView(PersonView):
             'user': user,
             'person': person,
             'favorite_events': favorite_events,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
-
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/events/my_favorite_events.html', context)

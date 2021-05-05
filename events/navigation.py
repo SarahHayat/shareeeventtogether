@@ -1,7 +1,6 @@
 from django.urls import reverse
 
 NAV_EVENEMENT = 'Evenement'
-NAV_PROFIL = 'Profil'
 NAV_HOME = 'Home'
 
 SHORTCUT_EVENEMENT = 'events'

@@ -7,21 +7,35 @@ from django.views import View
 
 from events import navigation
 from events.forms import PersonForm, ProfilForm
-from events.models import Event, InscriptionEvent
-from events.models_helpers import get_person_by_id, get_if_person_is_registered, get_person_by_user
+from events.models import Event
+from events.models_helpers import get_person_by_id, get_person_by_user
 from persons.models import Person
 from users.models import User
+from django.contrib.auth import views as auth_views
 
 
 class PersonView(LoginRequiredMixin, View):
     login_url = 'login'
 
 
+class MyLoginView(auth_views.LoginView):
+    template_name = "persons/registration/login.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
+        })
+        return context
+
+
 class HomeView(View):
     def get(self, request):
         user = request.user
+        person = get_person_by_user(user) if user.pk else None
         context = {
             'user': user,
+            'person': person,
             'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/home.html', context)
@@ -32,6 +46,7 @@ class InscriptionView(View):
         form = PersonForm()
         context = {
             'form': form,
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/registration/incription.html', context)
 
@@ -60,7 +75,7 @@ class DetailProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/profil/profil_detail.html', context)
 
@@ -73,7 +88,7 @@ class EditProfilView(PersonView):
         context = {
             'person': person,
             'form': form,
-            'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+            'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/profil/profil_edit.html', context)
 
@@ -92,7 +107,7 @@ class EditProfilView(PersonView):
             context = {
                 'person': person,
                 'form': form,
-                'navigation_items': navigation.navigation_items(navigation.NAV_PROFIL),
+                'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
 
             }
             return render(request, 'persons/profil/profil_edit.html', context)

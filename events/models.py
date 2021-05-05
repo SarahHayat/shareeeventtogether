@@ -28,6 +28,7 @@ class Event(models.Model):
     coordonate_y = models.CharField('coordonnée Y',max_length=10 , null=True, blank=True)
 
     def save(self, *args, **kwargs):
+
         api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={self.address}&postcode={self.zip_code}&city={self.city}&autocomplete=0&limit=1")
         reponse = api_request.json()
 
@@ -36,10 +37,9 @@ class Event(models.Model):
 
         self.address = reponse['features'][0]['properties']['name']
         self.zip_code = reponse['features'][0]['properties']['postcode']
-        self.city = reponse['features'][0]['properties']['city']
+        self.city = reponse['features'][0]['properties']['city'].upper()
         self.coordonate_x = str(coordonate_x).replace(",", ".")
         self.coordonate_y = str(coordonate_y).replace(",", ".")
-
         super().save(*args, **kwargs)
 
     def getEventId(self):

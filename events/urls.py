@@ -5,12 +5,12 @@ from django.contrib.auth import views as auth_views
 from events.views.events import ProfileEventDetailsView, DeleteEventView, EditEventView, ProfileRegisteredEventsView, \
     DesinscriptionEventView, ProfileFinishedEventsView, EventDetailsView, EventCreateView, EventInscriptionView, \
     EventDescriptionView, ProfileRatingFinishedEventsView, EventFavoriteView, UnfavoriteEventView, ProfileFavoriteEventsView
-from events.views.persons import InscriptionView, EditProfilView, DetailProfilView, HomeView, ProfilShowUserView, \
+from events.views.persons import MyLoginView, InscriptionView, EditProfilView, DetailProfilView, HomeView, ProfilShowUserView, \
     ProfilShowEventView
 
 urlpatterns = [
     path('', lambda r: HttpResponseRedirect(reverse_lazy('events')), name='accueil'),
-    path('connexion', auth_views.LoginView.as_view(template_name="persons/registration/login.html"), name='login'),
+    path('connexion', MyLoginView.as_view(), name='login'),
     path('deconnexion', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('inscription', InscriptionView.as_view(), name='inscription'),
     path('home', HomeView.as_view(), name='home'),

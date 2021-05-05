@@ -115,13 +115,13 @@ h4 a, .show-user {
     padding-right: 0;
 }
 /* Click + hover color */
-input:checked ~ label, /* color current and previous stars on checked */
-label:hover, label:hover ~ label { color: #eecb10;  } /* color previous stars on hover */
+.rate > input:checked ~ label, /* color current and previous stars on checked */
+.rate > label:hover, .rate > label:hover ~ label { color: #eecb10;  } /* color previous stars on hover */
 
 /* Hover highlights */
-input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
-input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
-label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #F0DF94;  }
+.rate > input:checked + label:hover, .rate > input:checked ~ label:hover, /* highlight current and previous stars */
+.rate > input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+.rate > label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #F0DF94;  }
 
 .not-visible span {
        color: transparent;
