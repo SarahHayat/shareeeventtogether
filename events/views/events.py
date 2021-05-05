@@ -30,8 +30,8 @@ class EventDetailsView(View):
         person = get_person_by_user(user) if user.pk else None
         api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={person.address}&postcode={person.zip_code}&city={person.city}&autocomplete=0&limit=1") if user.pk else None
         reponse = api_request.json() if user.pk else None
-        coordonate_x = reponse['features'][0]['geometry']['coordinates'][1] if user.pk else 48.8
-        coordonate_y = reponse['features'][0]['geometry']['coordinates'][0] if user.pk else 2.3
+        coordonate_x = reponse['features'][0]['geometry']['coordinates'][1] if user.pk else 48.866667
+        coordonate_y = reponse['features'][0]['geometry']['coordinates'][0] if user.pk else 2.333333
         category_filter = request.GET.get('category_filter', ALL_CATEGORIES)
         lieu_filter = request.GET.get('lieu')
 
@@ -46,8 +46,9 @@ class EventDetailsView(View):
             category = get_events_categories(events)
             api_request = requests.get(f"https://api-adresse.data.gouv.fr/search/?q={lieu_filter}&autocomplete=0&limit=1")
             reponse = api_request.json()
-            coordonate_x = reponse['features'][0]['geometry']['coordinates'][1]
-            coordonate_y = reponse['features'][0]['geometry']['coordinates'][0]
+            print(reponse)
+            coordonate_x = reponse['features'][0]['geometry']['coordinates'][1] if reponse['features'] is [] else 48.866667
+            coordonate_y = reponse['features'][0]['geometry']['coordinates'][0] if reponse['features'] is [] else 2.333333
         else:
             events = get_all_events()
             filtered_events = get_filtered_events(events, category_filter, lieu_filter)
