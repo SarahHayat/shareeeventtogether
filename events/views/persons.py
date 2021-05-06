@@ -36,6 +36,7 @@ class HomeView(View):
         context = {
             'user': user,
             'person': person,
+            'fluid': True,
             'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/home.html', context)
