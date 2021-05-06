@@ -9,7 +9,7 @@ from events.views.persons import MyLoginView, InscriptionView, EditProfilView, D
     ProfilShowEventView, DeleteProfilView
 
 urlpatterns = [
-    path('', lambda r: HttpResponseRedirect(reverse_lazy('events')), name='accueil'),
+    path('', lambda r: HttpResponseRedirect(reverse_lazy('home')), name='accueil'),
     path('connexion', MyLoginView.as_view(), name='login'),
     path('deconnexion', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('inscription', InscriptionView.as_view(), name='inscription'),

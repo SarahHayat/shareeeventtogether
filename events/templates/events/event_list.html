@@ -103,13 +103,13 @@
                                                         {% if event.person.note is not None %}
                                                             {% if event.person.note >= 7 %}
                                                                 <img height="25" width="25"
-                                                                     src="{% static 'assets/good.svg' %}">
+                                                                     src="{% static 'assets/good.svg' %}" title="bon karma">
                                                             {% elif event.person.note < 7 and event.person.note >= 4 %}
                                                                 <img height="25" width="25"
-                                                                     src="{% static 'assets/average.svg' %}">
+                                                                     src="{% static 'assets/average.svg' %}" title="karma moyen">
                                                             {% else %}
                                                                 <img height="25" width="25"
-                                                                     src="{% static 'assets/bad.svg' %}">
+                                                                     src="{% static 'assets/bad.svg' %}" title="mauvais karma">
                                                             {% endif %}
                                                         {% endif %}
                                                     </h5>
