@@ -1,4 +1,5 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
 body {
     background-color: whitesmoke !important;
 }
@@ -48,11 +49,11 @@ h4 a, .show-user {
     top: 5%
 }
 
-.note i{
+.note i {
     color: yellow;
 }
 
-.note a{
+.note a {
     cursor: pointer;
 }
 
@@ -87,16 +88,19 @@ h4 a, .show-user {
     display: inline-block;
     border: 0;
 }
+
 /* Hide radio */
 .rate > input {
     display: none;
 }
+
 /* Order correctly by floating highest to the right */
 .rate > label {
     float: right;
     padding: 0;
     margin: 0;
 }
+
 /* The star of the show */
 .rate > label:before {
     display: inline-block;
@@ -114,17 +118,201 @@ h4 a, .show-user {
     position: absolute;
     padding-right: 0;
 }
+
 /* Click + hover color */
 .rate > input:checked ~ label, /* color current and previous stars on checked */
-.rate > label:hover, .rate > label:hover ~ label { color: #eecb10;  } /* color previous stars on hover */
+.rate > label:hover, .rate > label:hover ~ label {
+    color: #eecb10;
+}
+
+/* color previous stars on hover */
 
 /* Hover highlights */
 .rate > input:checked + label:hover, .rate > input:checked ~ label:hover, /* highlight current and previous stars */
 .rate > input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
-.rate > label:hover ~ input:checked ~ label /* highlight previous selected stars */ { color: #F0DF94;  }
+.rate > label:hover ~ input:checked ~ label /* highlight previous selected stars */
+{
+    color: #F0DF94;
+}
 
 .not-visible span {
-       color: transparent;
-   text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    color: transparent;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     content: "Don't try to read it"
+}
+
+.contain {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background: #478680;
+    overflow: hidden;
+    padding: 0 5%;
+    box-sizing: border-box;
+}
+
+.circle {
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    width: 140%;
+    height: 200%;
+    border-radius: 50%;
+    background: #F0DF94;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.circle1 {
+    position: absolute;
+    top: -30%;
+    left: 90%;
+    width: 140%;
+    height: 200%;
+    border-radius: 50%;
+    background: #F0DF94;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.content {
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+    margin: 0 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content .btn-event {
+    display: inline-block;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #478680, #ED773C);
+    padding: 10px 20px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #E4E5BC;
+    box-shadow: 3px 8px 22px rgba(94, 28, 68, 0.15);
+}
+
+.content h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-top: 24px;
+    margin-bottom: 15px;
+    color: #fff;
+    z-index: 11;
+}
+
+.content p {
+    font-size: 2em;
+    margin: 5% 0;
+    color: #70B7AE;
+}
+
+.feature-img {
+    width: 50%;
+}
+
+.feature-img img {
+    width: 90%;
+    height: 90%;
+}
+
+.content-event {
+    width: 50%;
+    margin-bottom: 20%
+}
+
+.section {
+    position: relative;
+    background: #478680;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-top: -20vh;
+}
+
+.blockquote-custom {
+    position: relative;
+    font-size: 1.1rem;
+    z-index: 1000;
+}
+
+.blockquote-custom-icon {
+    width: 250px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -25px;
+    left: 50px;
+    background: #70B7AE !important;
+}
+
+@media screen and (max-width: 1024px) {
+    .content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content-event {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .content img {
+        width: 100%;
+    }
+
+    .row-margin .col-lg-6 {
+        margin-top: 3rem !important;
+    }
+
+    .container-margin {
+        margin-top: 10vh;
+    }
+}
+
+@media screen and (max-width: 764px) {
+    .content img {
+        display: none;
+    }
+
+    .circle {
+        display: none;
+    }
+
+    .circle1 {
+        display: none;
+    }
+
+    .content {
+        background: #F0DF94;
+        margin: 0;
+    }
+
+    .contain {
+        padding: 0;
+    }
+
+    .content-event {
+        width: 100%;
+        margin-left: 20%;
+    }
+
+    .section {
+        margin: 0;
+    }
+
+
 }
