@@ -6,7 +6,7 @@ from events.views.events import ProfileEventDetailsView, DeleteEventView, EditEv
     DesinscriptionEventView, ProfileFinishedEventsView, EventDetailsView, EventCreateView, EventInscriptionView, \
     EventDescriptionView, ProfileRatingFinishedEventsView, EventFavoriteView, UnfavoriteEventView, ProfileFavoriteEventsView
 from events.views.persons import MyLoginView, InscriptionView, EditProfilView, DetailProfilView, HomeView, ProfilShowUserView, \
-    ProfilShowEventView
+    ProfilShowEventView, DeleteProfilView
 
 urlpatterns = [
     path('', lambda r: HttpResponseRedirect(reverse_lazy('events')), name='accueil'),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('evenement/favoris/desinscription/<int:favorite_id>', UnfavoriteEventView.as_view(), name='unfavorite-event'),
     path('profil', DetailProfilView.as_view(), name='profil'),
     path('profil/modifier', EditProfilView.as_view(), name='profil-edit'),
+    path('profil/supprimer', DeleteProfilView.as_view(), name='profil-delete'),
     path('profil/evenements', ProfileEventDetailsView.as_view(), name='profil-events'),
     path('profil/evenements/inscrit', ProfileRegisteredEventsView.as_view(), name='profil-registered_events'),
     path('profil/evenements/finis', ProfileFinishedEventsView.as_view(), name='profil-finished-events'),

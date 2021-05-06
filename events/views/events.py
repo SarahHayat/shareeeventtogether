@@ -206,6 +206,7 @@ class EditEventView(PersonView):
         context = {
             'person': person,
             'form': form,
+            'event': event,
             'navigation_items': navigation.navigation_items(navigation.NAV_EVENEMENT),
         }
         return render(request, 'persons/events/my_events_form.html', context)

@@ -13,15 +13,17 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profil-events' %}">Mes évenements</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'profil-favorite-events' %}">Mes évenements favoris</a>
-                        </li>
+                        {% if person.person_type != "professionnel" %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Noter les événements</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'profil-favorite-events' %}">Mes évenements favoris</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
 
@@ -29,7 +31,7 @@
             <div class="row">
                 <div class="col mt-3">
                     <div class="row">
-                        <h1 class="col-md-7">Mes Inscriptions passées</h1>
+                        <h1 class="col-md-7">Noter les événements</h1>
 
                     </div>
                     <div class="row d-flex">
@@ -151,8 +153,8 @@
                                                                 $('#fieldset_{{ inscription.event.pk }}').find('input[type=radio]').each(function () {
                                                                     if ($(this).prop('checked')) {
                                                                         url = url + '?rating=' + $(this).attr('value')
+                                                                        window.location = url
                                                                     }
-                                                                    window.location = url
                                                                     event.preventDefault()
                                                                 })
                                                             })

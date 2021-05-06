@@ -68,6 +68,11 @@
                                     class="fas fa-arrow-down"></i> Date decroissant</a>
                         </li>
                     </ul>
+                    <b>Type</b>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-user"></i> : particulier</li>
+                        <li><i class="fas fa-user-tie"></i> : professionnel</li>
+                    </ul>
                 </div>
                 <div class="col-md-9 p-0">
                     {% if filtered_events %}
@@ -110,12 +115,10 @@
                                                     </h5>
                                                     <p class="card-text"><b>Catégorie :</b> {{ event.category|title }}
                                                     </p>
-                                                    <p class="card-text"><b>Lieu :</b> {{ event.city|title }}
-                                                        le {{ event.event_date|date:'d/m/y à h:m' }}</p>
+                                                    <p class="card-text"><b>Lieu :</b> {{ event.city }} ( {{ event.zip_code }} )</p>
+                                                    <p class="card-text"><b>Date :</b> le {{ event.event_date|date:'d/m/y à h:m' }}</p>
                                                     <a href="{% url 'description-event' event.pk %}"
-                                                       class="btn btn-primary">Plus
-                                                        de
-                                                        détails</a>
+                                                       class="btn btn-primary">Plus de détails</a>
                                                 </div>
                                             </div>
                                         </div>

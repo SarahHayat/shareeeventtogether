@@ -32,6 +32,16 @@ body {
     color: #70B7AE !important;
 }
 
+.blue input::-webkit-file-upload-button{
+    background-color: #7ebcb5 !important;
+    color: white!important;
+    border: None!important;
+    border-radius: 3px!important;
+    padding: 7px 7px!important;
+    cursor: pointer!important;
+    margin-right: 10px!important;
+}
+
 h4 a, .show-user {
     color: #7ebcb5 !important;
 }
@@ -63,6 +73,7 @@ h4 a, .show-user {
 .action-card {
     position: absolute;
     bottom: 2%;
+    right: 4%;
 }
 
 .carousel-control-prev,
