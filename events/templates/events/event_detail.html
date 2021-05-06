@@ -55,6 +55,8 @@
                 </div>
                 <hr>
                 <div id="carouselcontrol" class="carousel slide" data-ride="carousel">
+                {% if events_caroussel.count > 1 %}
+                <h4><b>Suggestion d'événements</b></h4>
                     <div class="carousel-inner slide carousel-multi-item">
                         {% for event in events_caroussel %}
                             {% if forloop.counter0|divisibleby:2 %}
@@ -99,6 +101,7 @@
                             </a>
                         {% endif %}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}
