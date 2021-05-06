@@ -19,8 +19,7 @@
                                 <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions
-                                    passées</a>
+                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Noter les événements</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'profil-favorite-events' %}">Mes évenements favoris</a>
@@ -58,9 +57,7 @@
                                         </p>
                                         <p class="card-text"><b>Catégorie :</b> {{ inscription.event.category|title }}
                                         </p>
-                                        <p class="card-text"><b>Lieu
-                                            :</b> {{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }}
-                                            le {{ inscription.event.event_date|date:'d/m/y à h:m' }}</p>
+                                        <p class="card-text"><b>Lieu :</b> {{ inscription.event.address }}, {{ inscription.event.zip_code }}, {{ inscription.event.city }} le {{ inscription.event.event_date|date:'d/m/y à h:m' }}</p>
                                         <a class="text-danger action-card" data-toggle="modal" data-target="#close_modal{{ inscription.pk }}">Se désinscrire</a>
                                     </div>
                                 </div>
@@ -76,12 +73,12 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p>Êtes-vous sûr de vouloir vous désinscrire de cet événement ?</p>
+                                            <p>Êtes-vous sûr de vouloir vous désinscrire de l'événement <b>{{ inscription.event.title|title }}</b> ?</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-link" type="button" data-dismiss="modal"
                                                     aria-label="Close">
-                                                <span aria-hidden="true">Annuler</span>
+                                                <span aria-hidden="true" class="text-muted">Annuler</span>
                                             </button>
                                             <a href="{% url 'desinscription-event' inscription.pk %}"
                                                class="btn btn-danger">Confirmer</a>

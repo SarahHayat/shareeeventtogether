@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -6,7 +7,7 @@ from django.utils.datetime_safe import datetime
 from django.views import View
 
 from events import navigation
-from events.forms import PersonForm, ProfilForm
+from events.forms import PersonForm, ProfilForm, DeleteUserForm
 from events.models import Event
 from events.models_helpers import get_person_by_id, get_person_by_user
 from persons.models import Person
@@ -73,9 +74,11 @@ class DetailProfilView(PersonView):
         user = request.user
         person = Person.objects.get(user=user)
         form = ProfilForm(instance=person)
+        formDelete = DeleteUserForm()
         context = {
             'person': person,
             'form': form,
+            'formDelete': formDelete,
             'navigation_items': navigation.navigation_items(navigation.NAV_HOME),
         }
         return render(request, 'persons/profil/profil_detail.html', context)
@@ -97,14 +100,15 @@ class EditProfilView(PersonView):
         user = request.user
         person = Person.objects.get(user=user)
         form = ProfilForm(person, request.POST, request.FILES)
+        print(form.errors)
         if form.is_valid():
+            print("form is valid")
             person.user.email = form.cleaned_data['email']
             person.user.save()
 
             person.save()
             return redirect(reverse('profil'))
         else:
-            form = ProfilForm(instance=person)
             context = {
                 'person': person,
                 'form': form,
@@ -147,3 +151,20 @@ class ProfilShowEventView(PersonView):
         }
 
         return render(request, 'persons/profil/profil_show_events.html', context)
+
+
+class DeleteProfilView(PersonView):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        person = get_person_by_user(user)
+        form = DeleteUserForm(request.POST)
+        if form.is_valid():
+            pseudo = form.cleaned_data['pseudo']
+            password = form.cleaned_data['password']
+            if check_password(password, person.user.password) and pseudo == person.pseudo:
+                user.delete()
+                return redirect(reverse('login'))
+            return redirect(reverse('profil'))
+        else:
+            return redirect(reverse('profil'))
