@@ -16,11 +16,10 @@
                         </li>
                         {% if person.person_type != "professionnel" %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes Inscriptions</a>
+                                <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes favorites
-                                    passées</a>
+                                <a class="nav-link" href="{% url 'profil-finished-events' %}">Noter les événements</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'profil-favorite-events' %}">Mes évenements favoris</a>

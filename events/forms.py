@@ -50,6 +50,7 @@ class ProfilForm(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder': 'Email'}),
             'phone_number': forms.TextInput(attrs={'placeholder': '0612344321'}),
+            'imageProfil': forms.FileInput(attrs={'class' : 'blue'})
         }
 
     def __init__(self, instance=None, *args, **kwargs):

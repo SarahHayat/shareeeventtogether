@@ -4,6 +4,7 @@
 {% block content %}
     <div class="row my-5">
         <div class="col-8 m-auto">
+            <h2>Modification de l'événement "{{ event.title|title }}" </h2>
             <form id="picker" method="post" >
                 {% csrf_token %}
                 {% bootstrap_field form.title required_css_class='required' %}
@@ -25,8 +26,10 @@
                         {% bootstrap_field form.event_date required_css_class='required' %}
                     </div>
                 </div>
-                <a class="text-danger mr-2" href="{% url 'profil-events' %}">Annuler</a>
-                <button class="btn btn-primary text-right" type="submit">Ajouter</button>
+                <div class="text-right">
+                    <a class="text-muted mr-2" href="{% url 'profil-events' %}">Annuler</a>
+                    <button class="btn btn-primary text-right" type="submit">Ajouter</button>
+                </div>
             </form>
         </div>
     </div>

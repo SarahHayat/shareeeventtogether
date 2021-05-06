@@ -1,8 +1,8 @@
 {% load bootstrap4 %}
 <form method="post">
-    <div class="row my-5">
+    <div class="row my-3">
         <div class="col-8 m-auto">
-
+            <h2>Ajouter un événement</h2>
             {% csrf_token %}
             <div>
                 {% bootstrap_field form.title required_css_class='required' %}
@@ -24,35 +24,12 @@
                         {% bootstrap_field form.event_date required_css_class='required' %}
                     </div>
                 </div>
-                <a class="text-danger mr-2" href="{% url 'events' %}">Annuler</a>
-                <a class="btn btn-primary" data-toggle="modal" data-target="#add_modal">Ajouter</a>
-            </div>
-
-        </div>
-    </div>
-
-
-    <div id="add_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static"
-         data-keyboard="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Noter</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Êtes-vous sûr de vouloir créer votre événement ?</p>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-link" type="button" data-dismiss="modal"
-                            aria-label="Close">
-                        <span aria-hidden="true">Annuler</span>
-                    </button>
-                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                <div class="text-right">
+                    <a class="text-muted mr-2" href="{% url 'events' %}">Annuler</a>
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
                 </div>
             </div>
+
         </div>
     </div>
 </form>

@@ -2,22 +2,27 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="row mb-3">
+    <div class="row mb-3 mt-3">
         <div class="col-md-8">
             <h1>Modifier mon profil</h1>
         </div>
         <div class="col-md-4 text-right">
-            <a class="btn btn-link" href="{% url 'profil' %}">Annuler</a>
-            <button type="submit" class="btn btn-primary ml-2">Enregistrer</button>
+            <a class="btn btn-link text-muted" href="{% url 'profil' %}">Annuler</a>
+            <button data-toggle="modal" data-target="#submit_modal" class="btn btn-primary ml-2">Enregistrer</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 blue">
+            <label>Image</label><br>
+            <img class="rounded-circle mr-5" height="90" width="90" src="{{ person.imageProfil.url }}">
+            {% bootstrap_field form.imageProfil required_css_class='required' show_label=False %}
         </div>
     </div>
     <div class="row">
         <div class="col-md-4">
-            {% bootstrap_field form.imageProfil required_css_class='required' %}
-        </div>
-        <div class="col-md-4">
             {% bootstrap_field form.pseudo required_css_class='required' %}
         </div>
+
     </div>
     <div class="row">
         <div class="col-md-4">
@@ -52,12 +57,38 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col align-self-center">
             {% bootstrap_field form.is_visible required_css_class='required' %}
         </div>
-        <div class="col-md-4">
-            <p>Veuillez entrer votre mot de passe pour modifiere votre profil</p>
-            {% bootstrap_field form.password required_css_class='required' %}
+    </div>
+
+    <div id="submit_modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier mon profil</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>Veuillez entrer votre mot de passe pour effectuer des modifications :</p>
+                        </div>
+                    </div>
+                    {% bootstrap_field form.password required_css_class='required' show_label=False%}
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-link" type="button" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true" class="text-muted">Annuler</span>
+                    </button>
+                    <button type="submit" class="btn btn-primary ml-2">Enregistrer</button>
+                </div>
+            </div>
         </div>
     </div>
 </form>

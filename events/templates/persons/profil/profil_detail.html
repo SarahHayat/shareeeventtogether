@@ -17,7 +17,7 @@
                 <a class="nav-link" href="{% url 'profil-registered_events' %}">Mes inscriptions</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'profil-finished-events' %}">Mes inscriptions passées</a>
+                <a class="nav-link" href="{% url 'profil-finished-events' %}">Noter les événements</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'profil-favorite-events' %}">Mes évenements favoris</a>
@@ -25,18 +25,19 @@
         {% endif %}
     </ul>
     <div class="row my-3">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div>
                 <h2 class="display-1">{{ person.pseudo }}</h2>
                 <p class="text-muted"> ({{ person.person_type }})</p>
             </div>
-            <img class="rounded-circle mr-5" height="70" width="70" src="{{ person.imageProfil.url }}">
+            <img class="rounded-circle mr-5" height="90" width="90" src="{{ person.imageProfil.url }}">
 
         </div>
-        <div class="col-md-4 text-right">
-            <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier</a>
-            <button data-toggle="modal" data-target="#delete_modal"><i class="fas fa-user-times"></i>Supprimer le
-                profil</button>
+        <div class="col-md-3 text-right">
+            <a href="{% url 'profil-edit' %}" class="btn btn-primary"><i class="far fa-edit"></i> Modifier le profil</a>
+            <button class="btn btn-danger mt-2" data-toggle="modal" data-target="#delete_modal"><i
+                    class="fas fa-user-times"></i> Supprimer le profil
+            </button>
         </div>
     </div>
     <div class="row">
@@ -133,23 +134,23 @@
                     </button>
                 </div>
                 <form method="post" action="{% url 'profil-delete' %}">
-                    <div class="modal-body text-center">
+                    <div class="modal-body">
                         {% csrf_token %}
-                        <p>Voulez vraiment supprimer votre profil ? Cette action est irréversible</p>
-                        {% bootstrap_field formDelete.pseudo required_css_class='required'%}
-                        {% bootstrap_field formDelete.password required_css_class='required'%}
-{#                        <label for="pseudo">Pseudo</label>#}
-{#                        <input type="text" id="pseudo" name="pseudo" required>#}
-{#                        <label for="password">Mot de passe</label>#}
-{#                        <input type="password" id="password" name="password" required>#}
+                        <div class="row">
+                            <div class="col">
+                                <p>Voulez vraiment supprimer votre profil ? Cette action est irréversible</p>
+                            </div>
+                        </div>
+                        {% bootstrap_field formDelete.pseudo required_css_class='required' show_label=False %}
+                        {% bootstrap_field formDelete.password required_css_class='required' show_label=False %}
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-link" type="button" data-dismiss="modal"
                                 aria-label="Close">
-                            <span aria-hidden="true">Annuler</span>
+                            <span aria-hidden="true" class="text-muted">Annuler</span>
                         </button>
-                        <button id="submit_button" type="submit" class="btn btn-primary">
-                            Confirmer
+                        <button id="submit_button" type="submit" class="btn btn-danger">
+                            Supprimer
                         </button>
                     </div>
                 </form>
